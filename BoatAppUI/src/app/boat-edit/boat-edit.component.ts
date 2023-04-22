@@ -26,15 +26,15 @@ export class BoatEditComponent implements OnInit, AfterViewInit {
   @ViewChild('form') form: any;
 
   constructor(
-    private activatedRoute: ActivatedRoute,
-    private boatApiService: BoatApiService,
+    private _activatedRoute: ActivatedRoute,
+    private _boatApiService: BoatApiService,
     private _router: Router
   ) {}
 
   isDataLoaded = false;
 
   ngOnInit() {
-    this.activatedRoute.params.subscribe((params) => {
+    this._activatedRoute.params.subscribe((params) => {
       this.loadBoat(params['id']);
     });
   }
@@ -45,7 +45,9 @@ export class BoatEditComponent implements OnInit, AfterViewInit {
 
   async loadBoat(id: string) {
     try {
-      const boat: IBoat = await firstValueFrom(this.boatApiService.getById(id));
+      const boat: IBoat = await firstValueFrom(
+        this._boatApiService.getById(id)
+      );
       this.boat = boat;
       this.isDataLoaded = true;
     } catch (error) {
@@ -55,7 +57,9 @@ export class BoatEditComponent implements OnInit, AfterViewInit {
 
   async updateBoat() {
     try {
-      await firstValueFrom(this.boatApiService.update(this.boat.id, this.boat));
+      await firstValueFrom(
+        this._boatApiService.update(this.boat.id, this.boat)
+      );
       this._router.navigate(['/boats-list']);
     } catch (error) {
       console.error('Error:', error);
