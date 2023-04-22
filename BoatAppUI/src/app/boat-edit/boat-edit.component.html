@@ -1,0 +1,69 @@
+<div *ngIf="isDataLoaded" class="container">
+  <h2 class="title">Edit Boat</h2>
+  <form #form="ngForm">
+    <mat-form-field class="form-field">
+      <mat-label>Name</mat-label>
+      <input matInput [(ngModel)]="boat.name" name="name" required />
+    </mat-form-field>
+
+    <mat-form-field class="form-field">
+      <mat-label>Description</mat-label>
+      <input matInput [(ngModel)]="boat.description" name="description" />
+    </mat-form-field>
+
+    <mat-form-field class="form-field">
+      <mat-label>Type</mat-label>
+      <input matInput [(ngModel)]="boat.type" name="type" />
+    </mat-form-field>
+
+    <mat-form-field class="form-field">
+      <mat-label>Length</mat-label>
+      <input matInput [(ngModel)]="boat.length" name="length" type="number" />
+    </mat-form-field>
+
+    <mat-form-field class="form-field">
+      <mat-label>Brand</mat-label>
+      <input matInput [(ngModel)]="boat.brand" name="brand" />
+    </mat-form-field>
+
+    <mat-form-field class="form-field">
+      <mat-label>Year</mat-label>
+      <input matInput [(ngModel)]="boat.year" name="year" type="number" />
+    </mat-form-field>
+
+    <mat-form-field class="form-field">
+      <mat-label>Engine Type</mat-label>
+      <input matInput [(ngModel)]="boat.engineType" name="engineType" />
+    </mat-form-field>
+
+    <mat-form-field class="form-field">
+      <mat-label>Fuel Capacity</mat-label>
+      <input
+        matInput
+        [(ngModel)]="boat.fuelCapacity"
+        name="fuelCapacity"
+        type="number"
+      />
+    </mat-form-field>
+
+    <mat-form-field class="form-field">
+      <mat-label>Water Capacity</mat-label>
+      <input
+        matInput
+        [(ngModel)]="boat.waterCapacity"
+        name="waterCapacity"
+        type="number"
+      />
+    </mat-form-field>
+  </form>
+  <div class="actions">
+    <button mat-raised-button color="primary" (click)="updateBoat()">
+      Update
+    </button>
+    <button mat-raised-button color="warn" (click)="onCancel()">Cancel</button>
+  </div>
+</div>
+
+<div *ngIf="!isDataLoaded" class="spinner-container">
+  <mat-spinner diameter="50"></mat-spinner>
+</div>
