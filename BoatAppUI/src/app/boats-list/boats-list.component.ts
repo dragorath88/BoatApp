@@ -67,10 +67,10 @@ export class BoatsListComponent implements OnInit, AfterViewInit {
     this._router.navigate(['/edit-boat', boatId]);
   }
 
-  async deleteBoat(boatId: string): Promise<void> {
+  async deleteBoat(boat: IBoat): Promise<void> {
     try {
       const dialogRef = this._dialog.open(BoatDeleteModalComponent, {
-        data: { boatId },
+        data: { boatId: boat.id, name: boat.name },
       });
 
       dialogRef.afterClosed().subscribe(async (result) => {
