@@ -4,6 +4,8 @@ import { BoatsListComponent } from './boats-list/boats-list.component';
 import { BoatEditComponent } from './boat-edit/boat-edit.component';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { AuthGuard } from './services/guard/auth.guard';
+import { BoatCreateComponent } from './boat-create/boat-create.component';
+import { BoatDetailModalComponent } from './boat-detail-modal/boat-detail-modal.component';
 
 const routes: Routes = [
   {
@@ -17,12 +19,14 @@ const routes: Routes = [
     component: BoatsListComponent,
     canActivate: [AuthGuard],
   },
+  { path: 'boat-detail/:id', component: BoatDetailModalComponent },
   {
     path: 'edit-boat/:id',
     component: BoatEditComponent,
     canActivate: [AuthGuard],
   },
   { path: 'sign-in', component: SignInComponent },
+  { path: 'boat-create', component: BoatCreateComponent },
 ];
 
 @NgModule({

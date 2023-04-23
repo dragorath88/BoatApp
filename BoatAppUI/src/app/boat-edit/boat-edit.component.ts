@@ -1,5 +1,6 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 import { IBoat } from '../interfaces/boat/iboat';
 import { BoatApiService } from '../services/boat-api/boat-api.service';
@@ -10,6 +11,8 @@ import { BoatApiService } from '../services/boat-api/boat-api.service';
   styleUrls: ['./boat-edit.component.scss'],
 })
 export class BoatEditComponent implements OnInit, AfterViewInit {
+  boatForm!: FormGroup;
+
   boat: IBoat = {
     id: '',
     name: '',
@@ -28,7 +31,8 @@ export class BoatEditComponent implements OnInit, AfterViewInit {
   constructor(
     private _activatedRoute: ActivatedRoute,
     private _boatApiService: BoatApiService,
-    private _router: Router
+    private _router: Router,
+    private _formBuilder: FormBuilder
   ) {}
 
   isDataLoaded = false;
@@ -36,6 +40,18 @@ export class BoatEditComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this._activatedRoute.params.subscribe((params) => {
       this.loadBoat(params['id']);
+    });
+
+    this.boatForm = this._formBuilder.group({
+      name: ['', [Validators.required]],
+      description: ['', [Validators.required]],
+      type: [''],
+      length: ['', [Validators.pattern('^[0-9]*$')]],
+      brand: [''],
+      year: ['', [Validators.pattern('^[0-9]*$')]],
+      engineType: [''],
+      fuelCapacity: ['', [Validators.pattern('^[0-9]*$')]],
+      waterCapacity: ['', [Validators.pattern('^[0-9]*$')]],
     });
   }
 
@@ -47,6 +63,19 @@ export class BoatEditComponent implements OnInit, AfterViewInit {
         this._boatApiService.getById(id)
       );
       this.boat = boat;
+
+      this.boatForm.setValue({
+        name: boat.name,
+        description: boat.description,
+        type: boat.type,
+        length: boat.length,
+        brand: boat.brand,
+        year: boat.year,
+        engineType: boat.engineType,
+        fuelCapacity: boat.fuelCapacity,
+        waterCapacity: boat.waterCapacity,
+      });
+
       this.isDataLoaded = true;
     } catch (error) {
       console.error('Error:', error);
@@ -55,8 +84,17 @@ export class BoatEditComponent implements OnInit, AfterViewInit {
 
   async updateBoat() {
     try {
+      if (this.boatForm.invalid) {
+        return;
+      }
+
+      const updatedBoat = {
+        ...this.boat,
+        ...this.boatForm.value,
+      };
+
       await firstValueFrom(
-        this._boatApiService.update(this.boat.id, this.boat)
+        this._boatApiService.update(updatedBoat.id, updatedBoat)
       );
       this._router.navigate(['/boats-list']);
     } catch (error) {

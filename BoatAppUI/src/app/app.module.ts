@@ -27,6 +27,7 @@ import { SignInComponent } from './sign-in/sign-in.component';
 
 import { AuthService } from './services/auth/auth.service';
 import { AuthGuard } from './services/guard/auth.guard';
+import { BoatCreateComponent } from './boat-create/boat-create.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -35,6 +36,7 @@ import { AuthGuard } from './services/guard/auth.guard';
     BoatDeleteModalComponent,
     BoatDetailModalComponent,
     SignInComponent,
+    BoatCreateComponent,
   ],
   imports: [
     BrowserModule,

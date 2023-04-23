@@ -1,5 +1,5 @@
-<div *ngIf="isDataLoaded" class="container">
-  <h1>Edit Boat</h1>
+<div class="container">
+  <h1>New Boat</h1>
   <form [formGroup]="boatForm" class="boat-form">
     <mat-form-field class="form-field">
       <mat-label>Name</mat-label>
@@ -11,7 +11,7 @@
 
     <mat-form-field class="form-field">
       <mat-label>Description</mat-label>
-      <input matInput formControlName="description" required />
+      <textarea matInput formControlName="description" required></textarea>
       <mat-error *ngIf="boatForm.get('description')?.hasError('required')">
         Description is required.
       </mat-error>
@@ -63,20 +63,14 @@
         WaterCapacity must be a number.
       </mat-error>
     </mat-form-field>
-  </form>
-  <div class="actions">
-    <button
-      mat-raised-button
-      color="primary"
-      (click)="updateBoat()"
-      [disabled]="boatForm.invalid"
-    >
-      Update
-    </button>
-    <button mat-raised-button color="warn" (click)="onCancel()">Cancel</button>
-  </div>
-</div>
 
-<div *ngIf="!isDataLoaded" class="spinner-container">
-  <mat-spinner diameter="50"></mat-spinner>
+    <div class="actions">
+      <button mat-raised-button color="primary" (click)="createBoat()">
+        Create
+      </button>
+      <button mat-raised-button color="warn" (click)="onCancel()">
+        Cancel
+      </button>
+    </div>
+  </form>
 </div>
