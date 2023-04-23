@@ -25,7 +25,12 @@
     <mat-form-field class="form-field">
       <mat-label>Length</mat-label>
       <input matInput formControlName="length" pattern="[0-9]*" />
-      <mat-error *ngIf="boatForm.get('length')?.hasError('pattern')">
+      <mat-error
+        *ngIf="
+          boatForm.get('length')?.hasError('pattern') ||
+          boatForm.get('length')?.hasError('nullValue')
+        "
+      >
         Length must be a number.
       </mat-error>
     </mat-form-field>
@@ -38,7 +43,12 @@
     <mat-form-field class="form-field">
       <mat-label>Year</mat-label>
       <input matInput formControlName="year" pattern="[0-9]*" />
-      <mat-error *ngIf="boatForm.get('year')?.hasError('pattern')">
+      <mat-error
+        *ngIf="
+          boatForm.get('year')?.hasError('pattern') ||
+          boatForm.get('year')?.hasError('nullValue')
+        "
+      >
         Year must be a number.
       </mat-error>
     </mat-form-field>
@@ -51,7 +61,12 @@
     <mat-form-field class="form-field">
       <mat-label>Fuel Capacity</mat-label>
       <input matInput formControlName="fuelCapacity" pattern="[0-9]*" />
-      <mat-error *ngIf="boatForm.get('fuelCapacity')?.hasError('pattern')">
+      <mat-error
+        *ngIf="
+          boatForm.get('fuelCapacity')?.hasError('pattern') ||
+          boatForm.get('fuelCapacity')?.hasError('nullValue')
+        "
+      >
         FuelCapacity must be a number.
       </mat-error>
     </mat-form-field>
@@ -59,18 +74,26 @@
     <mat-form-field class="form-field">
       <mat-label>Water Capacity</mat-label>
       <input matInput formControlName="waterCapacity" pattern="[0-9]*" />
-      <mat-error *ngIf="boatForm.get('waterCapacity')?.hasError('pattern')">
+      <mat-error
+        *ngIf="
+          boatForm.get('waterCapacity')?.hasError('pattern') ||
+          boatForm.get('waterCapacity')?.hasError('nullValue')
+        "
+      >
         WaterCapacity must be a number.
       </mat-error>
     </mat-form-field>
-
-    <div class="actions">
-      <button mat-raised-button color="primary" (click)="createBoat()">
-        Create
-      </button>
-      <button mat-raised-button color="warn" (click)="onCancel()">
-        Cancel
-      </button>
-    </div>
   </form>
+
+  <div class="actions">
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="createBoat()"
+      [disabled]="boatForm.invalid"
+    >
+      Create
+    </button>
+    <button mat-raised-button color="warn" (click)="onCancel()">Cancel</button>
+  </div>
 </div>

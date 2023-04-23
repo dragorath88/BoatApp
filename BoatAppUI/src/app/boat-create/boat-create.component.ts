@@ -1,5 +1,11 @@
 import { Component } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import {
+  FormGroup,
+  FormBuilder,
+  Validators,
+  ValidatorFn,
+  AbstractControl,
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import { BoatApiService } from '../services/boat-api/boat-api.service';
 
@@ -11,6 +17,18 @@ import { BoatApiService } from '../services/boat-api/boat-api.service';
 export class BoatCreateComponent {
   boatForm: FormGroup;
 
+  // custom validator function to disallow null values
+  nullValidatorOrPattern(pattern: string): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      if (control.value === null || control.value === '') {
+        return { nullValue: true };
+      } else if (pattern && !RegExp(pattern).test(control.value)) {
+        return { pattern: true };
+      }
+      return null;
+    };
+  }
+
   constructor(
     private _formBuilder: FormBuilder,
     private _boatApiService: BoatApiService,
@@ -20,12 +38,12 @@ export class BoatCreateComponent {
       name: ['', [Validators.required]],
       description: ['', [Validators.required]],
       type: [''],
-      length: ['', [Validators.pattern('^[0-9]*$')]],
+      length: [0, [this.nullValidatorOrPattern('^[0-9]*$')]],
       brand: [''],
-      year: ['', [Validators.pattern('^[0-9]*$')]],
+      year: [0, [this.nullValidatorOrPattern('^[0-9]*$')]],
       engineType: [''],
-      fuelCapacity: ['', [Validators.pattern('^[0-9]*$')]],
-      waterCapacity: ['', [Validators.pattern('^[0-9]*$')]],
+      fuelCapacity: [0, [this.nullValidatorOrPattern('^[0-9]*$')]],
+      waterCapacity: [0, [this.nullValidatorOrPattern('^[0-9]*$')]],
     });
   }
 

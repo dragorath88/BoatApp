@@ -1,6 +1,12 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 import { IBoat } from '../interfaces/boat/iboat';
 import { BoatApiService } from '../services/boat-api/boat-api.service';
@@ -37,6 +43,18 @@ export class BoatEditComponent implements OnInit, AfterViewInit {
 
   isDataLoaded = false;
 
+  // custom validator function to disallow null values
+  nullValidatorOrPattern(pattern: string): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      if (control.value === null || control.value === '') {
+        return { nullValue: true };
+      } else if (pattern && !RegExp(pattern).test(control.value)) {
+        return { pattern: true };
+      }
+      return null;
+    };
+  }
+
   ngOnInit() {
     this._activatedRoute.params.subscribe((params) => {
       this.loadBoat(params['id']);
@@ -46,12 +64,12 @@ export class BoatEditComponent implements OnInit, AfterViewInit {
       name: ['', [Validators.required]],
       description: ['', [Validators.required]],
       type: [''],
-      length: ['', [Validators.pattern('^[0-9]*$')]],
+      length: [0, [this.nullValidatorOrPattern('^[0-9]*$')]],
       brand: [''],
-      year: ['', [Validators.pattern('^[0-9]*$')]],
+      year: [0, [this.nullValidatorOrPattern('^[0-9]*$')]],
       engineType: [''],
-      fuelCapacity: ['', [Validators.pattern('^[0-9]*$')]],
-      waterCapacity: ['', [Validators.pattern('^[0-9]*$')]],
+      fuelCapacity: [0, [this.nullValidatorOrPattern('^[0-9]*$')]],
+      waterCapacity: [0, [this.nullValidatorOrPattern('^[0-9]*$')]],
     });
   }
 
