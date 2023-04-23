@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BoatApi.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
         private readonly IApiUserService _apiUserService;
