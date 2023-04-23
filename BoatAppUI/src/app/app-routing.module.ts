@@ -6,27 +6,37 @@ import { SignInComponent } from './sign-in/sign-in.component';
 import { AuthGuard } from './services/guard/auth.guard';
 import { BoatCreateComponent } from './boat-create/boat-create.component';
 import { BoatDetailModalComponent } from './boat-detail-modal/boat-detail-modal.component';
+import { MainNavigationComponent } from './main-navigation/main-navigation.component';
 
 const routes: Routes = [
+  { path: '', component: SignInComponent, pathMatch: 'full' },
+  { path: 'sign-in', component: SignInComponent },
   {
     path: '',
-    component: BoatsListComponent,
-    pathMatch: 'full',
-    canActivate: [AuthGuard],
+    component: MainNavigationComponent,
+    children: [
+      {
+        path: 'boats-list',
+        component: BoatsListComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'boat-create',
+        component: BoatCreateComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'boat-edit/:id',
+        component: BoatEditComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'boat-detail/:id',
+        component: BoatDetailModalComponent,
+        canActivate: [AuthGuard],
+      },
+    ],
   },
-  {
-    path: 'boats-list',
-    component: BoatsListComponent,
-    canActivate: [AuthGuard],
-  },
-  { path: 'boat-detail/:id', component: BoatDetailModalComponent },
-  {
-    path: 'edit-boat/:id',
-    component: BoatEditComponent,
-    canActivate: [AuthGuard],
-  },
-  { path: 'sign-in', component: SignInComponent },
-  { path: 'boat-create', component: BoatCreateComponent },
 ];
 
 @NgModule({

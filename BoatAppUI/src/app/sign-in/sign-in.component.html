@@ -1,13 +1,41 @@
-<h2>Sign In</h2>
-<div *ngIf="errorMessage" style="color: red">{{ errorMessage }}</div>
-<form (ngSubmit)="onSubmit()">
-  <div>
-    <label for="username">Username</label>
-    <input type="text" name="username" [(ngModel)]="username" required />
+<div class="center-container">
+  <div class="login-form-wrapper">
+    <div class="login-form-flex">
+      <mat-card>
+        <mat-card-title>Sign In</mat-card-title>
+        <mat-card-content>
+          <form (ngSubmit)="onSubmit()" autocomplete="off">
+            <mat-form-field>
+              <input
+                matInput
+                type="text"
+                name="username"
+                [(ngModel)]="username"
+                placeholder="username"
+                required
+              />
+            </mat-form-field>
+            <br />
+            <mat-form-field>
+              <input
+                matInput
+                type="password"
+                name="password"
+                [(ngModel)]="password"
+                placeholder="Password"
+                required
+              />
+            </mat-form-field>
+            <mat-card-actions>
+              <div class="button-flex-container">
+                <button mat-raised-button color="primary" type="submit">
+                  Sign In
+                </button>
+              </div>
+            </mat-card-actions>
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </div>
   </div>
-  <div>
-    <label for="password">Password</label>
-    <input type="password" name="password" [(ngModel)]="password" required />
-  </div>
-  <button type="submit">Sign In</button>
-</form>
+</div>

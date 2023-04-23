@@ -13,19 +13,19 @@ import { map } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class AuthGuard {
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private _authService: AuthService, private _router: Router) {}
 
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean | UrlTree> {
-    return of(this.authService.isAuthenticated()).pipe(
+    return of(this._authService.isAuthenticated()).pipe(
       map((isLoggedIn: boolean) => {
         if (isLoggedIn) {
           return true;
         } else {
           // User is not logged in, navigate to the sign-in page.
-          return this.router.createUrlTree(['/sign-in'], {
+          return this._router.createUrlTree(['/sign-in'], {
             queryParams: { returnUrl: state.url },
           });
         }

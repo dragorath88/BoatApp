@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -28,6 +28,14 @@ import { SignInComponent } from './sign-in/sign-in.component';
 import { AuthService } from './services/auth/auth.service';
 import { AuthGuard } from './services/guard/auth.guard';
 import { BoatCreateComponent } from './boat-create/boat-create.component';
+import { MainNavigationComponent } from './main-navigation/main-navigation.component';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatListModule } from '@angular/material/list';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { JwtInterceptor } from './services/auth/jwt-interceptor.service';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -37,6 +45,7 @@ import { BoatCreateComponent } from './boat-create/boat-create.component';
     BoatDetailModalComponent,
     SignInComponent,
     BoatCreateComponent,
+    MainNavigationComponent,
   ],
   imports: [
     BrowserModule,
@@ -57,8 +66,21 @@ import { BoatCreateComponent } from './boat-create/boat-create.component';
     MatIconModule,
     MatDialogModule,
     MatProgressSpinnerModule,
+    MatSidenavModule,
+    MatToolbarModule,
+    MatListModule,
+    MatMenuModule,
+    MatGridListModule,
   ],
-  providers: [AuthService, AuthGuard],
+  providers: [
+    AuthService,
+    AuthGuard,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: JwtInterceptor,
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

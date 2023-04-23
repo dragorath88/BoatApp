@@ -8,27 +8,27 @@ import { IBoatCreate } from '../../interfaces/boat/iboat-create';
   providedIn: 'root',
 })
 export class BoatApiService {
-  private apiUrl = '/api/boats';
+  private _apiUrl = '/api/boats';
 
   constructor(private http: HttpClient) {}
 
   getAll(): Observable<IBoat[]> {
-    return this.http.get<IBoat[]>(this.apiUrl);
+    return this.http.get<IBoat[]>(this._apiUrl);
   }
 
   getById(id: string): Observable<IBoat> {
-    return this.http.get<IBoat>(`${this.apiUrl}/${id}`);
+    return this.http.get<IBoat>(`${this._apiUrl}/${id}`);
   }
 
   create(boat: IBoatCreate): Observable<IBoat> {
-    return this.http.post<IBoat>(this.apiUrl, boat);
+    return this.http.post<IBoat>(this._apiUrl, boat);
   }
 
   update(id: string, boat: IBoat): Observable<IBoat> {
-    return this.http.put<IBoat>(`${this.apiUrl}/${id}`, boat);
+    return this.http.put<IBoat>(`${this._apiUrl}/${id}`, boat);
   }
 
   delete(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    return this.http.delete<void>(`${this._apiUrl}/${id}`);
   }
 }

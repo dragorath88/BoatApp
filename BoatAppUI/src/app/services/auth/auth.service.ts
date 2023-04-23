@@ -10,76 +10,93 @@ import { ISignInResponse } from '../../interfaces/isign-in-response';
   providedIn: 'root',
 })
 export class AuthService {
-  private readonly apiUrl = '/api/auth';
-  private httpOptions = {
+  private readonly _apiUrl = '/api/auth';
+  private _httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
     }),
   };
-  private tokenKey = 'token';
-  private tokenSubject = new BehaviorSubject<string>(
-    localStorage.getItem(this.tokenKey) ?? ''
+  private _tokenKey = 'token';
+  private _tokenSubject = new BehaviorSubject<string>(
+    localStorage.getItem(this._tokenKey) ?? ''
   );
-  private refreshTimer: any;
+  private _refreshTimer: any;
 
-  public token$: Observable<string> = this.tokenSubject.asObservable();
+  public token$: Observable<string> = this._tokenSubject.asObservable();
 
   constructor(
-    private readonly http: HttpClient,
-    private readonly router: Router
+    private readonly _http: HttpClient,
+    private readonly _router: Router
   ) {
     this.scheduleRefreshToken();
   }
 
   public signIn(username: string, password: string): Observable<any> {
-    return this.http
+    return this._http
       .post<ISignInResponse>(
-        `${this.apiUrl}/authenticate`,
+        `${this._apiUrl}/authenticate`,
         { username, password },
-        this.httpOptions
+        this._httpOptions
       )
       .pipe(
         tap((response) => {
           const token = response?.token;
           if (token) {
-            localStorage.setItem(this.tokenKey, token);
-            this.tokenSubject.next(token);
+            localStorage.setItem(this._tokenKey, token);
+            this._tokenSubject.next(token);
             this.scheduleRefreshToken();
+            setTimeout(() => {
+              this._router.navigate(['/boats-list']);
+            });
           }
         })
       );
   }
 
   public signOut(): Observable<any> {
-    return this.http.post(`${this.apiUrl}/logout`, null).pipe(
-      tap(() => {
-        this.unscheduleRefreshToken();
-        localStorage.removeItem(this.tokenKey);
-        this.tokenSubject.next('');
-        this.router.navigate(['/sign-in']);
-      })
-    );
-  }
-
-  public refreshToken(): Observable<any> {
-    const token = this.tokenSubject.value;
+    const token = this.getToken();
     if (!token) {
       return new Observable();
     }
 
-    return this.http
-      .post<ISignInResponse>(`${this.apiUrl}/refresh-token`, null, {
-        headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        }),
+    const httpOptionsWithToken = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      }),
+    };
+
+    return this._http
+      .post(`${this._apiUrl}/logout`, null, httpOptionsWithToken)
+      .pipe(
+        tap(() => {
+          this.unscheduleRefreshToken();
+          localStorage.removeItem(this._tokenKey);
+          this._tokenSubject.next('');
+          this._router.navigate(['/sign-in']);
+        })
+      );
+  }
+
+  public refreshToken(): Observable<any> {
+    const token = this._tokenSubject.value;
+    if (!token) {
+      return new Observable();
+    }
+
+    return this._http
+      .post<ISignInResponse>(`${this._apiUrl}/refresh-token`, null, {
+        // headers: new HttpHeaders({
+        //   'Content-Type': 'application/json',
+        //   Authorization: `Bearer ${token}`,
+        // }),
       })
       .pipe(
         tap((response) => {
           const token = response?.token;
           if (token) {
-            localStorage.setItem(this.tokenKey, token);
-            this.tokenSubject.next(token);
+            localStorage.setItem(this._tokenKey, token);
+            this._tokenSubject.next(token);
             this.scheduleRefreshToken();
           }
         })
@@ -87,7 +104,7 @@ export class AuthService {
   }
 
   public getToken(): string | null {
-    return localStorage.getItem(this.tokenKey) ?? null;
+    return localStorage.getItem(this._tokenKey) ?? null;
   }
 
   public isAuthenticated(): boolean {
@@ -115,10 +132,10 @@ export class AuthService {
     const timeDiff = tokenExpDate.getTime() - now.getTime() - 5 * 60 * 1000; // refresh 5 minutes before expiration
 
     if (timeDiff > 0) {
-      this.refreshTimer = setTimeout(async () => {
+      this._refreshTimer = setTimeout(async () => {
         try {
           const response = await firstValueFrom(this.refreshToken());
-          localStorage.setItem(this.tokenKey, response.token);
+          localStorage.setItem(this._tokenKey, response.token);
           this.scheduleRefreshToken();
         } catch (error) {
           throwError(() => error);
@@ -128,8 +145,8 @@ export class AuthService {
   }
 
   private unscheduleRefreshToken() {
-    if (this.refreshTimer) {
-      clearTimeout(this.refreshTimer);
+    if (this._refreshTimer) {
+      clearTimeout(this._refreshTimer);
     }
   }
 }

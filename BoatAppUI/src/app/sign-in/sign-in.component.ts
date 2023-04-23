@@ -12,18 +12,18 @@ export class SignInComponent {
   errorMessage!: string;
 
   constructor(
-    private authService: AuthService,
-    private route: ActivatedRoute,
-    private router: Router
+    private _authService: AuthService,
+    private _route: ActivatedRoute,
+    private _router: Router
   ) {}
 
   onSubmit() {
-    this.authService
+    this._authService
       .signIn(this.username, this.password)
       .subscribe((result) => {
         if (result) {
-          const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
-          this.router.navigate([returnUrl || '/']);
+          const returnUrl = this._route.snapshot.queryParamMap.get('returnUrl');
+          this._router.navigate([returnUrl || '/']);
         } else {
           this.errorMessage = 'Invalid username or password';
         }

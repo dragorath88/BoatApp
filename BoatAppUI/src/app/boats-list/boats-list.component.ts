@@ -77,7 +77,7 @@ export class BoatsListComponent implements OnInit, AfterViewInit {
   }
 
   editBoat(boatId: string): void {
-    this._router.navigate(['/edit-boat', boatId]);
+    this._router.navigate(['/boat-edit', boatId]);
   }
 
   async deleteBoat(boat: IBoat): Promise<void> {
