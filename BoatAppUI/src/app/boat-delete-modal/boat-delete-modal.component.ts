@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { BoatApiService } from '../services/boat/boat-api.service';
+import { BoatApiService } from '../services/boat-api/boat-api.service';
 import { firstValueFrom } from 'rxjs';
 
 @Component({

@@ -2,7 +2,7 @@ import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { IBoat } from '../interfaces/boat/iboat';
-import { BoatApiService } from '../services/boat/boat-api.service';
+import { BoatApiService } from '../services/boat-api/boat-api.service';
 
 @Component({
   selector: 'app-boat-edit',

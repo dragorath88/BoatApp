@@ -4,7 +4,7 @@ const LOG_LEVEL = process.env.NODE_ENV === "production" ? "silent" : "debug";
 const CHECK_CERTIFICATE = process.env.NODE_ENV === "production";
 
 module.exports = {
-  "/api": {
+  "/api/*": {
     target: API_URL,
     secure: CHECK_CERTIFICATE,
     changeOrigin: true,

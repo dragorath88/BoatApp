@@ -2,7 +2,7 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { BoatApiService } from '../services/boat/boat-api.service';
+import { BoatApiService } from '../services/boat-api/boat-api.service';
 import { IBoat } from '../interfaces/boat/iboat';
 import { firstValueFrom } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';

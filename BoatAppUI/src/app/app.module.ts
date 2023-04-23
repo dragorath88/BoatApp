@@ -23,6 +23,10 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { BoatDeleteModalComponent } from './boat-delete-modal/boat-delete-modal.component';
 import { BoatDetailModalComponent } from './boat-detail-modal/boat-detail-modal.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { SignInComponent } from './sign-in/sign-in.component';
+
+import { AuthService } from './services/auth/auth.service';
+import { AuthGuard } from './services/guard/auth.guard';
 @NgModule({
   declarations: [
     AppComponent,
@@ -30,6 +34,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     BoatEditComponent,
     BoatDeleteModalComponent,
     BoatDetailModalComponent,
+    SignInComponent,
   ],
   imports: [
     BrowserModule,
@@ -51,7 +56,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatDialogModule,
     MatProgressSpinnerModule,
   ],
-  providers: [],
+  providers: [AuthService, AuthGuard],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
