@@ -23,7 +23,7 @@ export class BoatEditComponent implements OnInit, AfterViewInit {
     waterCapacity: 0,
   };
 
-  @ViewChild('form') form: any;
+  @ViewChild('form', { static: false }) form: any;
 
   constructor(
     private _activatedRoute: ActivatedRoute,
@@ -39,9 +39,7 @@ export class BoatEditComponent implements OnInit, AfterViewInit {
     });
   }
 
-  async ngAfterViewInit() {
-    this.form.reset();
-  }
+  async ngAfterViewInit() {}
 
   async loadBoat(id: string) {
     try {
