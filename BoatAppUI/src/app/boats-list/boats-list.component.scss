@@ -6,7 +6,19 @@
   mat-table {
     flex: 1;
     overflow: auto;
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+
+      button {
+        margin-right: 10px;
+        margin-bottom: 10px;
+      }
+    }
   }
+
   .mat-paginator {
     margin-top: auto;
   }

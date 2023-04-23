@@ -1,4 +1,10 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  HostListener,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -29,6 +35,8 @@ export class BoatsListComponent implements OnInit, AfterViewInit {
     'waterCapacity',
     'actions',
   ];
+  displayedColumnsMobile: string[] = ['name', 'description', 'actions'];
+  showMobileColumns = false;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
@@ -38,7 +46,12 @@ export class BoatsListComponent implements OnInit, AfterViewInit {
     private _dialog: MatDialog
   ) {}
 
-  ngOnInit() {}
+  screenSizeBreak = 992;
+
+  ngOnInit() {
+    // Check screen width on init
+    this.showMobileColumns = window.innerWidth < this.screenSizeBreak;
+  }
 
   async ngAfterViewInit() {
     try {
@@ -56,13 +69,13 @@ export class BoatsListComponent implements OnInit, AfterViewInit {
   createBoat(): void {
     this._router.navigate(['/create-boat']);
   }
-  displayBoat(boatId: string): void {
+
+  displayBoat(boat: IBoat): void {
     this._dialog.open(BoatDetailModalComponent, {
-      data: {
-        boatId,
-      },
+      data: boat,
     });
   }
+
   editBoat(boatId: string): void {
     this._router.navigate(['/edit-boat', boatId]);
   }
@@ -82,5 +95,11 @@ export class BoatsListComponent implements OnInit, AfterViewInit {
     } catch (error) {
       console.error('Error:', error);
     }
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.showMobileColumns = event.target.innerWidth < this.screenSizeBreak;
+    console.log('showMobileColumns:', this.showMobileColumns);
   }
 }
