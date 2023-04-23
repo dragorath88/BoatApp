@@ -1,0 +1,76 @@
+<div class="container">
+  <h1>New Boat</h1>
+  <form [formGroup]="boatForm" class="boat-form">
+    <mat-form-field class="form-field">
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name" required />
+      <mat-error *ngIf="boatForm.get('name')?.hasError('required')">
+        Name is required.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="form-field">
+      <mat-label>Description</mat-label>
+      <textarea matInput formControlName="description" required></textarea>
+      <mat-error *ngIf="boatForm.get('description')?.hasError('required')">
+        Description is required.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="form-field">
+      <mat-label>Type</mat-label>
+      <input matInput formControlName="type" />
+    </mat-form-field>
+
+    <mat-form-field class="form-field">
+      <mat-label>Length</mat-label>
+      <input matInput formControlName="length" pattern="[0-9]*" />
+      <mat-error *ngIf="boatForm.get('length')?.hasError('pattern')">
+        Length must be a number.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="form-field">
+      <mat-label>Brand</mat-label>
+      <input matInput formControlName="brand" />
+    </mat-form-field>
+
+    <mat-form-field class="form-field">
+      <mat-label>Year</mat-label>
+      <input matInput formControlName="year" pattern="[0-9]*" />
+      <mat-error *ngIf="boatForm.get('year')?.hasError('pattern')">
+        Year must be a number.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="form-field">
+      <mat-label>Engine Type</mat-label>
+      <input matInput formControlName="engineType" />
+    </mat-form-field>
+
+    <mat-form-field class="form-field">
+      <mat-label>Fuel Capacity</mat-label>
+      <input matInput formControlName="fuelCapacity" pattern="[0-9]*" />
+      <mat-error *ngIf="boatForm.get('fuelCapacity')?.hasError('pattern')">
+        FuelCapacity must be a number.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="form-field">
+      <mat-label>Water Capacity</mat-label>
+      <input matInput formControlName="waterCapacity" pattern="[0-9]*" />
+      <mat-error *ngIf="boatForm.get('waterCapacity')?.hasError('pattern')">
+        WaterCapacity must be a number.
+      </mat-error>
+    </mat-form-field>
+
+    <div class="actions">
+      <button mat-raised-button color="primary" (click)="createBoat()">
+        Create
+      </button>
+      <button mat-raised-button color="warn" (click)="onCancel()">
+        Cancel
+      </button>
+    </div>
+  </form>
+</div>

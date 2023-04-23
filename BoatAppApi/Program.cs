@@ -4,8 +4,14 @@ using BoatApi.Dtos;
 using BoatApi.Models;
 using BoatApi.Repositories;
 using BoatApi.Services;
+using BoatAppApi.Config;
+using BoatAppApi.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,28 +54,93 @@ var mapperConfig = new MapperConfiguration(cfg =>
 });
 builder.Services.AddSingleton(mapperConfig.CreateMapper());
 
+// Add JWT authentication
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
+var jwtSettings = builder.Configuration.GetSection("Jwt").Get<JwtSettings>();
+// JwtSettings dependency injection
+builder.Services.AddSingleton(jwtSettings);
+
+var key = Encoding.ASCII.GetBytes(jwtSettings.Secret);
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.RequireHttpsMetadata = false;
+    options.SaveToken = true;
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ClockSkew = TimeSpan.Zero
+    };
+});
+
 // Services
 builder.Services.AddScoped<IBoatService, BoatService>();
 builder.Services.AddScoped<IBoatRepository, BoatRepository>();
+builder.Services.AddScoped<IJwtService, JwtService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IApiUserService, ApiUserService>();
 
+// Add MemoryCache service
+builder.Services.AddMemoryCache();
+
+// Swagger services
+// Add SwaggerGen
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "BoatAppApi", Version = "v1" });
+
+    // Add JWT Authentication
+    var securityScheme = new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        BearerFormat = "JWT",
+        Description = "JWT Authorization header using the Bearer scheme.",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
+    };
+    c.AddSecurityDefinition("Bearer", securityScheme);
+
+    // Make sure Swagger UI requires a Bearer token to be specified
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            securityScheme,
+            new string[] { }
+        }
+    });
+});
+
+// Controllers and endpoints
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Swagger middleware
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
+// Use HTTPS redirection
 app.UseHttpsRedirection();
 
+// Use authentication and authorization
+app.UseAuthentication();
 app.UseAuthorization();
 
+// Map controllers
 app.MapControllers();
 
+// Run application
 app.Run();

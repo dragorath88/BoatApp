@@ -1,5 +1,6 @@
 ﻿using BoatApi.Dtos;
 using BoatApi.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BoatApi.Controllers
@@ -21,6 +22,7 @@ namespace BoatApi.Controllers
         /// Gets all boats from the database.
         /// </summary>
         /// <returns>A list of boats.</returns>
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BoatDto>>> GetBoats()
         {
@@ -37,6 +39,7 @@ namespace BoatApi.Controllers
         }
 
         // POST api/boats
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<BoatDto>> CreateBoat([FromBody] CreateBoatDto createBoatDto)
         {
@@ -53,6 +56,7 @@ namespace BoatApi.Controllers
         }
 
         // GET api/boats/{id}
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<BoatDto>> GetBoatById(Guid id)
         {
@@ -73,6 +77,7 @@ namespace BoatApi.Controllers
         }
 
         // PUT api/boats/{id}
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<ActionResult<BoatDto>> UpdateBoat(Guid id, [FromBody] UpdateBoatDto updateBoatDto)
         {
@@ -93,6 +98,7 @@ namespace BoatApi.Controllers
         }
 
         // DELETE api/boats/{id}
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBoat(Guid id)
         {
