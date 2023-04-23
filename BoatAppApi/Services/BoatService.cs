@@ -50,7 +50,6 @@ namespace BoatApi.Services
             try
             {
                 var boat = _mapper.Map<Boat>(createBoatDto);
-                boat.Id = Guid.NewGuid();
 
                 var createdBoat = await _boatRepository.CreateAsync(boat);
 

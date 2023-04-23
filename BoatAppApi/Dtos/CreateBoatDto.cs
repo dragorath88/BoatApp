@@ -13,12 +13,12 @@ namespace BoatApi.Dtos
         [Required]
         public string Description { get; set; }
 
-        public string Type { get; set; }
-        public int Length { get; set; }
-        public string Brand { get; set; }
-        public int Year { get; set; }
-        public string EngineType { get; set; }
-        public int FuelCapacity { get; set; }
-        public int WaterCapacity { get; set; }
+        public string Type { get; set; } = string.Empty;
+        public int Length { get; set; } = 0;
+        public string Brand { get; set; } = string.Empty;
+        public int Year { get; set; } = 0;
+        public string EngineType { get; set; } = string.Empty;
+        public int FuelCapacity { get; set; } = 0;
+        public int WaterCapacity { get; set; } = 0;
     }
 }

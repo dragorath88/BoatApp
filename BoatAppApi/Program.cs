@@ -49,8 +49,24 @@ builder.Services.AddIdentity<BoatApiUser, IdentityRole>()
 var mapperConfig = new MapperConfiguration(cfg =>
 {
     cfg.CreateMap<Boat, BoatDto>();
-    cfg.CreateMap<CreateBoatDto, Boat>();
-    cfg.CreateMap<UpdateBoatDto, Boat>();
+    cfg.CreateMap<CreateBoatDto, Boat>()
+        .BeforeMap((src, dest) =>
+        {
+            if (string.IsNullOrEmpty(src.Name) || string.IsNullOrEmpty(src.Description))
+            {
+                throw new ArgumentException("Name and description are required.");
+            }
+        })
+        .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid()))
+        .IgnoreAllPropertiesWithAnInaccessibleSetter(); ;
+    cfg.CreateMap<UpdateBoatDto, Boat>()
+        .BeforeMap((src, dest) =>
+        {
+            if (string.IsNullOrEmpty(src.Name) || string.IsNullOrEmpty(src.Description))
+            {
+                throw new ArgumentException("Name and description are required.");
+            }
+        });
 });
 builder.Services.AddSingleton(mapperConfig.CreateMapper());
 

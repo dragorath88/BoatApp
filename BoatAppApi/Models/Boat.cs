@@ -1,4 +1,6 @@
-﻿namespace BoatApi.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace BoatApi.Models
 {
     /// <summary>
     /// Represents a boat in the application.
@@ -15,11 +17,13 @@
         /// <summary>
         /// Gets or sets the name of the boat.
         /// </summary>
+        [Required]
         public string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the description of the boat.
         /// </summary>
+        [Required]
         public string Description { get; set; }
 
         /// <summary>
