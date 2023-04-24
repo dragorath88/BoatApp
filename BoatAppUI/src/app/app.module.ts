@@ -35,6 +35,9 @@ import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { JwtInterceptor } from './services/auth/jwt-interceptor.service';
+import { SignUpComponent } from './sign-up/sign-up.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { UserApiService } from './services/auth/user-api/user-api.service';
 
 @NgModule({
   declarations: [
@@ -46,6 +49,7 @@ import { JwtInterceptor } from './services/auth/jwt-interceptor.service';
     SignInComponent,
     BoatCreateComponent,
     MainNavigationComponent,
+    SignUpComponent,
   ],
   imports: [
     BrowserModule,
@@ -71,9 +75,11 @@ import { JwtInterceptor } from './services/auth/jwt-interceptor.service';
     MatListModule,
     MatMenuModule,
     MatGridListModule,
+    MatSnackBarModule,
   ],
   providers: [
     AuthService,
+    UserApiService,
     AuthGuard,
     {
       provide: HTTP_INTERCEPTORS,

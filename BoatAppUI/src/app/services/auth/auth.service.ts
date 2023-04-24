@@ -31,86 +31,7 @@ export class AuthService {
     this.scheduleRefreshToken();
   }
 
-  public signIn(username: string, password: string): Observable<any> {
-    return this._http
-      .post<ISignInResponse>(
-        `${this._apiUrl}/authenticate`,
-        { username, password },
-        this._httpOptions
-      )
-      .pipe(
-        tap((response) => {
-          const token = response?.token;
-          if (token) {
-            localStorage.setItem(this._tokenKey, token);
-            this._tokenSubject.next(token);
-            this.scheduleRefreshToken();
-            setTimeout(() => {
-              this._router.navigate(['/boats-list']);
-            });
-          }
-        })
-      );
-  }
-
-  public signOut(): Observable<any> {
-    const token = this.getToken();
-    if (!token) {
-      return new Observable();
-    }
-
-    const httpOptionsWithToken = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      }),
-    };
-
-    return this._http
-      .post(`${this._apiUrl}/logout`, null, httpOptionsWithToken)
-      .pipe(
-        tap(() => {
-          this.unscheduleRefreshToken();
-          localStorage.removeItem(this._tokenKey);
-          this._tokenSubject.next('');
-          this._router.navigate(['/sign-in']);
-        })
-      );
-  }
-
-  public refreshToken(): Observable<any> {
-    const token = this._tokenSubject.value;
-    if (!token) {
-      return new Observable();
-    }
-
-    return this._http
-      .post<ISignInResponse>(`${this._apiUrl}/refresh-token`, null, {
-        // headers: new HttpHeaders({
-        //   'Content-Type': 'application/json',
-        //   Authorization: `Bearer ${token}`,
-        // }),
-      })
-      .pipe(
-        tap((response) => {
-          const token = response?.token;
-          if (token) {
-            localStorage.setItem(this._tokenKey, token);
-            this._tokenSubject.next(token);
-            this.scheduleRefreshToken();
-          }
-        })
-      );
-  }
-
-  public getToken(): string | null {
-    return localStorage.getItem(this._tokenKey) ?? null;
-  }
-
-  public isAuthenticated(): boolean {
-    const token = this.getToken();
-    return token != null && !this.isTokenExpired(token);
-  }
+  // Private functions
 
   private isTokenExpired(token: string): boolean {
     const expiry = JSON.parse(atob(token.split('.')[1])).exp;
@@ -148,5 +69,74 @@ export class AuthService {
     if (this._refreshTimer) {
       clearTimeout(this._refreshTimer);
     }
+  }
+
+  // Public functions
+
+  signIn(username: string, password: string): Observable<any> {
+    return this._http
+      .post<ISignInResponse>(
+        `${this._apiUrl}/authenticate`,
+        { username, password },
+        this._httpOptions
+      )
+      .pipe(
+        tap((response) => {
+          const token = response?.token;
+          if (token) {
+            localStorage.setItem(this._tokenKey, token);
+            this._tokenSubject.next(token);
+            this.scheduleRefreshToken();
+            setTimeout(() => {
+              this._router.navigate(['/boats-list']);
+            });
+          }
+        })
+      );
+  }
+
+  signOut(): Observable<any> {
+    const token = this.getToken();
+    if (!token) {
+      return new Observable();
+    }
+
+    return this._http.post(`${this._apiUrl}/logout`, null).pipe(
+      tap(() => {
+        this.unscheduleRefreshToken();
+        localStorage.removeItem(this._tokenKey);
+        this._tokenSubject.next('');
+        this._router.navigate(['/sign-in']);
+      })
+    );
+  }
+
+  refreshToken(): Observable<any> {
+    const token = this._tokenSubject.value;
+    if (!token) {
+      return new Observable();
+    }
+
+    return this._http
+      .post<ISignInResponse>(`${this._apiUrl}/refresh-token`, null)
+      .pipe(
+        tap((response) => {
+          const token = response?.token;
+          if (token) {
+            localStorage.setItem(this._tokenKey, token);
+            this._tokenSubject.next(token);
+            this.scheduleRefreshToken();
+          }
+        })
+      );
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem(this._tokenKey) ?? null;
+  }
+
+  isAuthenticated(): boolean {
+    const token = this.getToken();
+    return token != null && !this.isTokenExpired(token);
   }
 }

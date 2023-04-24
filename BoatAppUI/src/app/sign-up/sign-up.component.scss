@@ -1,0 +1,42 @@
+.center-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.login-form-wrapper {
+  max-width: 400px;
+  width: 100%;
+}
+
+.login-form-flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.mat-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 25px;
+
+  form {
+    mat-form-field {
+      display: flex;
+      width: 100%;
+    }
+  }
+
+  .mat-card-content {
+    padding: 0;
+  }
+
+  .button-flex-container {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+  }
+}

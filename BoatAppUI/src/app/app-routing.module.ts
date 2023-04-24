@@ -7,10 +7,12 @@ import { AuthGuard } from './services/guard/auth.guard';
 import { BoatCreateComponent } from './boat-create/boat-create.component';
 import { BoatDetailModalComponent } from './boat-detail-modal/boat-detail-modal.component';
 import { MainNavigationComponent } from './main-navigation/main-navigation.component';
+import { SignUpComponent } from './sign-up/sign-up.component';
 
 const routes: Routes = [
   { path: '', component: SignInComponent, pathMatch: 'full' },
   { path: 'sign-in', component: SignInComponent },
+  { path: 'sign-up', component: SignUpComponent },
   {
     path: '',
     component: MainNavigationComponent,
