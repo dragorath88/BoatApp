@@ -95,13 +95,6 @@
       </div>
       <!-- Right -->
       <div class="flex flex-col dm-sm:mx-8 right-side gap-3">
-        <div class="flex flex-col mb-8 dm-header items-end">
-          <a
-            href="/sign-up"
-            class="text-blue-600 hover:text-blue-800 font-bold focus:outline-none"
-            >New User? Sign Up Here</a
-          >
-        </div>
         <div
           class="flex flex-col m-auto items-center justify-center rounded-full right-side__dm-icon"
         >
@@ -116,7 +109,7 @@
           </div>
         </div>
         <!-- form -->
-        <div class="flex flex-col gap-4 dm-sm:flex-row">
+        <div class="flex flex-col gap-6">
           <form (ngSubmit)="onSubmit()" autocomplete="off" class="w-full">
             <mat-form-field class="w-full">
               <input
@@ -129,7 +122,6 @@
               />
               <mat-icon class="form-icon" matPrefix>person</mat-icon>
             </mat-form-field>
-            <br />
             <mat-form-field class="w-full">
               <input
                 matInput
@@ -141,13 +133,15 @@
               />
               <mat-icon class="form-icon" matPrefix>lock</mat-icon>
             </mat-form-field>
-
             <div class="text-right">
               <button mat-raised-button class="signin w-full" type="submit">
                 Sign In
               </button>
             </div>
           </form>
+          <div class="px-2 py-6 rounded text-center signup-container">
+            Don't have an account? <span routerLink="/sign-up">Sign Up</span>
+          </div>
         </div>
       </div>
     </div>
