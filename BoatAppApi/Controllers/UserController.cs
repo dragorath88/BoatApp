@@ -4,6 +4,7 @@
     using System.Threading.Tasks;
     using BoatApi.Dtos;
     using BoatApi.Models;
+    using BoatAppApi.Models;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
 
@@ -42,7 +43,12 @@
                 // Check if the provided username already exists
                 if (await _userManager.FindByNameAsync(userDto.Username) != null)
                 {
-                    return BadRequest("Username already exists");
+                    return BadRequest(
+                        new ErrorResponse
+                        {
+                            Code = "USERNAME_ALREADY_EXISTS",
+                            Message = "The username already exists.",
+                        });
                 }
 
                 // Create a new User entity based on the DTO
@@ -67,7 +73,13 @@
                 else
                 {
                     // If the user creation failed, return a response with the validation errors
-                    return BadRequest(result.Errors);
+                    return BadRequest(
+                        new ErrorResponse
+                        {
+                            Code = "VALIDATION_ERRORS",
+                            Message = "Please check the error details for more information.",
+                            Details = result.Errors,
+                        });
                 }
             }
             catch (Exception ex)

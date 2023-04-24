@@ -2,6 +2,7 @@
 {
     using BoatApi.Dtos;
     using BoatAppApi.Config;
+    using BoatAppApi.Models;
     using BoatAppApi.Services;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
@@ -35,7 +36,12 @@
 
                 if (user == null)
                 {
-                    return BadRequest(new { message = "Username or password is incorrect" });
+                    return BadRequest(
+                        new ErrorResponse
+                        {
+                            Code = "INCORRECT_USERNAME_OR_PASSWORD",
+                            Message = "Username or password is incorrect",
+                        });
                 }
 
                 var token = _jwtService.GenerateToken(user.Id, _jwtSettings.ExpiresInMinutes, _jwtSettings.Secret);
@@ -68,13 +74,23 @@
                 var userId = User.Identity?.Name;
                 if (string.IsNullOrEmpty(userId))
                 {
-                    return BadRequest(new { message = "Id is missing" });
+                    return BadRequest(
+                        new ErrorResponse
+                        {
+                            Code = "MISSING_USER_ID",
+                            Message = "The user id is missing",
+                        });
                 }
 
                 var user = await _apiUserService.GetUserByIdAsync(userId);
                 if (user == null)
                 {
-                    return BadRequest(new { message = "User not found" });
+                    return BadRequest(
+                        new ErrorResponse
+                        {
+                            Code = "USER_NOT_EXISTS",
+                            Message = "The user not exists",
+                        });
                 }
 
                 var currentToken = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", string.Empty);
