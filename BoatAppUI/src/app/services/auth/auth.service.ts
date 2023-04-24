@@ -2,9 +2,10 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, firstValueFrom, throwError } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 import { Buffer } from 'buffer';
 import { ISignInResponse } from '../../interfaces/isign-in-response';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root',
@@ -26,7 +27,8 @@ export class AuthService {
 
   constructor(
     private readonly _http: HttpClient,
-    private readonly _router: Router
+    private readonly _router: Router,
+    private _snackBar: MatSnackBar
   ) {
     this.scheduleRefreshToken();
   }
@@ -109,6 +111,15 @@ export class AuthService {
               this._router.navigate(['/boats-list']);
             });
           }
+        }),
+        catchError((error) => {
+          this._snackBar.open(error.error, 'Close', {
+            duration: 5000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            panelClass: ['snackbar-error'],
+          });
+          return throwError(() => error);
         })
       );
   }
