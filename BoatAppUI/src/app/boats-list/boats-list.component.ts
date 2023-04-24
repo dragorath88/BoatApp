@@ -47,6 +47,7 @@ export class BoatsListComponent implements OnInit, AfterViewInit {
   ) {}
 
   screenSizeBreak = 992;
+  isDataLoaded = false;
 
   ngOnInit() {
     // Check screen width on init
@@ -61,6 +62,7 @@ export class BoatsListComponent implements OnInit, AfterViewInit {
       this.dataSource.data = boats;
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
+      this.isDataLoaded = true;
     } catch (error) {
       console.error('Error:', error);
     }
