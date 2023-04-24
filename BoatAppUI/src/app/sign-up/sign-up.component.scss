@@ -8,7 +8,7 @@
   .main-content {
     .left-side {
       width: 700px;
-      height: 500px;
+      height: 700px;
       background-size: 750px;
       background-position: center;
       background-repeat: no-repeat;
@@ -47,12 +47,12 @@
         background-color: #2a76d2;
         color: #fff;
         border: 1px solid #2a76d2;
-      }
 
-      .signup:disabled {
-        background-color: #4573ac;
-        color: #fff;
-        border: 1px solid #4573ac;
+        &.mat-mdc-raised-button[disabled][disabled] {
+          background-color: rgba(0, 0, 0, 0.12);
+          color: rgba(0, 0, 0, 0.38);
+          border: 1px solid transparent;
+        }
       }
 
       .dm-header {
@@ -66,6 +66,20 @@
 
       .form-icon {
         color: #cacaca;
+      }
+
+      .dm-password-feedback-box {
+        display: flex;
+        gap: 1rem;
+        border: 1px solid #f44336;
+        background-color: hsla(4 90% 96% / 100%);
+        border-radius: 0.25rem;
+        padding: 0.5rem 0.5rem;
+
+        &__icon {
+          display: flex;
+          align-items: start;
+        }
       }
     }
   }

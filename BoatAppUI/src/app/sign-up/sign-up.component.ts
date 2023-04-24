@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserApiService } from '../services/auth/user-api/user-api.service';
+import { fadeInUpAnimation } from '../shared/animations/fade-in-up.animations';
 
 /**
  * Component that displays the sign-up form
@@ -11,6 +12,7 @@ import { UserApiService } from '../services/auth/user-api/user-api.service';
   selector: 'app-signup',
   templateUrl: './sign-up.component.html',
   styleUrls: ['./sign-up.component.scss'],
+  animations: [fadeInUpAnimation],
 })
 export class SignUpComponent {
   /*

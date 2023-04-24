@@ -1,4 +1,4 @@
-<div class="h-full dm-landing-page-container">
+<div @fadeInUp class="h-full dm-landing-page-container">
   <div
     class="flex flex-col justify-center gap-4 h-full overflow-auto my-0 mx-auto p-8 max-w-7xl dm-sm:p-20"
   >
@@ -109,10 +109,14 @@
           </div>
         </div>
         <!-- form -->
-        <div class="flex flex-col gap-4 dm-sm:flex-row">
-          <form [formGroup]="signUpForm" autocomplete="off" class="w-full">
+        <div class="flex flex-col gap-2">
+          <form
+            [formGroup]="signUpForm"
+            autocomplete="off"
+            class="flex flex-col gap-2 w-full"
+          >
             <mat-form-field class="w-full">
-              <mat-label>UserName</mat-label>
+              <mat-label>Username</mat-label>
               <input matInput formControlName="username" required />
               <mat-icon class="form-icon" matPrefix>person</mat-icon>
               <mat-error
@@ -139,7 +143,7 @@
             </mat-form-field>
 
             <mat-form-field class="w-full">
-              <mat-label>ConfirmPassword</mat-label>
+              <mat-label>Confirm password</mat-label>
               <input
                 matInput
                 formControlName="confirmpassword"
@@ -170,20 +174,27 @@
               </div>
             </mat-card-actions>
           </form>
+          <mat-error
+            @fadeInUp
+            *ngIf="signUpForm.get('password')?.hasError('pattern')"
+          >
+            <div class="dm-password-feedback-box">
+              <div class="dm-password-feedback-box__icon">
+                <mat-icon>information</mat-icon>
+              </div>
+              <div>
+                <div>
+                  Password must contain at least 8 characters and at least :
+                </div>
+                <div>One uppercase letter</div>
+                <div>One lowercase letter</div>
+                <div>One number</div>
+                <div>One special character (@$!%*?&)</div>
+              </div>
+            </div>
+          </mat-error>
         </div>
       </div>
-    </div>
-    <div class="flex flex-col items-end">
-      <mat-error *ngIf="signUpForm.get('password')?.hasError('pattern')">
-        Password must contain at least 8 characters
-        <br />
-        with at least :
-        <br />
-        one uppercase letter <br />
-        one lowercase letter <br />
-        one number <br />
-        and one special character (@$!%*?&)
-      </mat-error>
     </div>
   </div>
 </div>
