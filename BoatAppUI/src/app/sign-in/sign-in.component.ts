@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../services/auth/auth.service';
+import { fadeInUpAnimation } from '../shared/animations/fade-in-up.animations';
 
 /**
  * Component that displays a sign-in form and handles user sign-in
@@ -9,6 +10,7 @@ import { AuthService } from '../services/auth/auth.service';
   selector: 'app-signin',
   templateUrl: './sign-in.component.html',
   styleUrls: ['./sign-in.component.scss'],
+  animations: [fadeInUpAnimation],
 })
 export class SignInComponent {
   /**

@@ -37,6 +37,7 @@ import { SignInComponent } from './sign-in/sign-in.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { UserApiService } from './services/auth/user-api/user-api.service';
 import { JwtInterceptor } from './services/auth/jwt-interceptor.service';
+import { FadeInUpStaggerElementDirective } from './shared/animations/fade-in-up.animations';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { JwtInterceptor } from './services/auth/jwt-interceptor.service';
     BoatCreateComponent,
     MainNavigationComponent,
     SignUpComponent,
+    FadeInUpStaggerElementDirective,
   ],
   imports: [
     BrowserModule,

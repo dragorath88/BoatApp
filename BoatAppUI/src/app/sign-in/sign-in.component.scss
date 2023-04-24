@@ -61,6 +61,21 @@
       .form-icon {
         color: #cacaca;
       }
+
+      .signup-container {
+        border: 1px solid hsla(210 79% 46% / 100%);
+        color: hsla(210 79% 46% / 100%);
+        background: hsla(210 79% 96% / 100%);
+
+        span {
+          font-weight: bold;
+        }
+
+        span:hover {
+          cursor: pointer;
+          text-decoration: underline;
+        }
+      }
     }
   }
 }
