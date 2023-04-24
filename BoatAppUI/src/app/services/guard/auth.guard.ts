@@ -13,19 +13,25 @@ import { map } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class AuthGuard {
-  constructor(private _authService: AuthService, private _router: Router) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
+  /**
+   * Determines whether the user can activate a route or not
+   * @param route The activated route
+   * @param state The router state
+   * @returns An observable of boolean or UrlTree that indicates whether the user can access the route or not
+   */
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean | UrlTree> {
-    return of(this._authService.isAuthenticated()).pipe(
+    return of(this.authService.isAuthenticated()).pipe(
       map((isLoggedIn: boolean) => {
         if (isLoggedIn) {
           return true;
         } else {
           // User is not logged in, navigate to the sign-in page.
-          return this._router.createUrlTree(['/sign-in'], {
+          return this.router.createUrlTree(['/sign-in'], {
             queryParams: { returnUrl: state.url },
           });
         }

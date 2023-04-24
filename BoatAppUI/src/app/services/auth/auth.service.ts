@@ -33,17 +33,26 @@ export class AuthService {
 
   // Private functions
 
+  /**
+   * Checks if the token has expired
+   * @param token The token to check
+   * @returns True if the token is expired, false otherwise
+   */
   private isTokenExpired(token: string): boolean {
     const expiry = JSON.parse(atob(token.split('.')[1])).exp;
     const now = new Date().getTime() / 1000;
     return expiry < now;
   }
 
+  /**
+   * Schedules the next refresh of the token, 5 minutes before the token expires
+   */
   private async scheduleRefreshToken() {
     const token = this.getToken();
     if (!token) {
       return;
     }
+
     const tokenExpDate = new Date(
       parseInt(
         JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString()).exp
@@ -65,6 +74,9 @@ export class AuthService {
     }
   }
 
+  /**
+   * Cancels the scheduled refresh of the token
+   */
   private unscheduleRefreshToken() {
     if (this._refreshTimer) {
       clearTimeout(this._refreshTimer);
@@ -73,6 +85,12 @@ export class AuthService {
 
   // Public functions
 
+  /**
+   * Signs in a user with a given username and password
+   * @param username The username of the user
+   * @param password The password of the user
+   * @returns An observable that emits the sign-in response
+   */
   signIn(username: string, password: string): Observable<any> {
     return this._http
       .post<ISignInResponse>(
@@ -95,6 +113,10 @@ export class AuthService {
       );
   }
 
+  /**
+   * Signs out the currently authenticated user.
+   * @returns An observable that emits the sign-out response
+   */
   signOut(): Observable<any> {
     const token = this.getToken();
     if (!token) {
@@ -111,6 +133,10 @@ export class AuthService {
     );
   }
 
+  /**
+   * Sends a request to refresh the current authentication token.
+   * @returns An observable that emits the refresh token response
+   */
   refreshToken(): Observable<any> {
     const token = this._tokenSubject.value;
     if (!token) {
@@ -131,10 +157,18 @@ export class AuthService {
       );
   }
 
+  /**
+   * Retrieves the current authentication token from local storage.
+   * @returns The current authentication token or null if there is none
+   */
   getToken(): string | null {
     return localStorage.getItem(this._tokenKey) ?? null;
   }
 
+  /**
+   * Determines whether the current user is authenticated.
+   * @returns True if the user is authenticated, false otherwise
+   */
   isAuthenticated(): boolean {
     const token = this.getToken();
     return token != null && !this.isTokenExpired(token);

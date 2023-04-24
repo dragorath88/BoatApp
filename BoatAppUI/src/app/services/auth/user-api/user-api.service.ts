@@ -1,7 +1,7 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable, firstValueFrom, throwError } from 'rxjs';
+import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { ISignUpResponse } from 'src/app/interfaces/isign-up-response';
 
@@ -16,11 +16,18 @@ export class UserApiService {
     private readonly _router: Router
   ) {}
 
+  /**
+   * Sends a sign up request to the API with the given credentials
+   * @param username - The username of the new user
+   * @param password - The password of the new user
+   * @param confirmpassword - The confirmed password of the new user
+   * @returns An Observable of the sign up response
+   */
   signUp(
     username: string,
     password: string,
     confirmpassword: string
-  ): Observable<any> {
+  ): Observable<ISignUpResponse> {
     return this._http.post<ISignUpResponse>(this._apiUrl, {
       username,
       password,
