@@ -1,8 +1,7 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-
-namespace BoatApi.Dtos
+﻿namespace BoatApi.Dtos
 {
+    using System.ComponentModel.DataAnnotations;
+
     /// <summary>
     /// DTO used to update an existing boat entity.
     /// </summary>

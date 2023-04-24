@@ -1,36 +1,27 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
-using BoatApi.Models;
-
-namespace BoatApi.Data
+﻿namespace BoatApi.Data
 {
+    using BoatApi.Models;
+    using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore;
+
     /// <summary>
     /// Represents the database context for the BoatApi application.
     /// </summary>
     public class BoatApiDbContext : IdentityDbContext<BoatApiUser>
     {
-        #region Public Properties
-
         /// <summary>
         /// Gets or sets the boats DbSet.
         /// </summary>
         public DbSet<Boat> Boats { get; set; }
 
-        #endregion
-
-        #region Constructor
-
         /// <summary>
-        /// Initializes a new instance of the BoatApiDbContext class with the specified options.
+        /// Initializes a new instance of the <see cref="BoatApiDbContext"/> class with the specified options.
         /// </summary>
         /// <param name="options">The options to be used for this context.</param>
-        public BoatApiDbContext(DbContextOptions<BoatApiDbContext> options) : base(options)
+        public BoatApiDbContext(DbContextOptions<BoatApiDbContext> options)
+            : base(options)
         {
         }
-
-        #endregion
-
-        #region Protected Methods
 
         /// <summary>
         /// Configures the model for this context.
@@ -83,7 +74,5 @@ namespace BoatApi.Data
                 entity.Property(e => e.WaterCapacity);
             });
         }
-
-        #endregion
     }
 }

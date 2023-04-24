@@ -1,14 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace BoatApi.Dtos
+﻿namespace BoatApi.Dtos
 {
+    using System.ComponentModel.DataAnnotations;
+
     /// <summary>
     /// DTO used to log in a user.
     /// </summary>
     public class LoginDto
     {
-        #region Properties
-
         /// <summary>
         /// The username of the user.
         /// </summary>
@@ -20,7 +18,5 @@ namespace BoatApi.Dtos
         /// </summary>
         [Required]
         public string Password { get; set; }
-
-        #endregion
     }
 }

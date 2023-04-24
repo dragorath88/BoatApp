@@ -1,7 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace BoatApi.Dtos
+﻿namespace BoatApi.Dtos
 {
+    using System.ComponentModel.DataAnnotations;
+
     /// <summary>
     /// DTO used to represent user registration details.
     /// </summary>

@@ -1,11 +1,11 @@
-﻿using BoatApi.Dtos;
-using BoatAppApi.Config;
-using BoatAppApi.Services;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-
-namespace BoatApi.Controllers
+﻿namespace BoatApi.Controllers
 {
+    using BoatApi.Dtos;
+    using BoatAppApi.Config;
+    using BoatAppApi.Services;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+
     [ApiController]
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
@@ -42,7 +42,7 @@ namespace BoatApi.Controllers
 
                 return Ok(new
                 {
-                    Token = token
+                    Token = token,
                 });
             }
             catch (UnauthorizedAccessException ex)
@@ -77,7 +77,7 @@ namespace BoatApi.Controllers
                     return BadRequest(new { message = "User not found" });
                 }
 
-                var currentToken = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+                var currentToken = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", string.Empty);
                 _jwtService.RevokeToken(currentToken);
 
                 await _apiUserService.InvalidateSecurityStampAsync(user);
@@ -100,7 +100,7 @@ namespace BoatApi.Controllers
         {
             try
             {
-                var currentToken = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+                var currentToken = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", string.Empty);
                 var principal = _jwtService.VerifyToken(currentToken, _jwtSettings.Secret);
                 var identity = User?.Identity;
                 var userId = identity?.Name;

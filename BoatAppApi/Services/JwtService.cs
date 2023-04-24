@@ -1,16 +1,15 @@
-﻿using BoatAppApi.Services;
-using Microsoft.Extensions.Caching.Memory;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using BoatAppApi.Services;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.IdentityModel.Tokens;
 
 public class JwtService : IJwtService
 {
+    private const string RevokedTokensKey = "revokedTokens";
     private readonly IMemoryCache _cache;
     private readonly ILogger<JwtService> _logger;
-    private const string RevokedTokensKey = "revokedTokens";
-
 
     public JwtService(IMemoryCache cache, ILogger<JwtService> logger)
     {
@@ -33,10 +32,10 @@ public class JwtService : IJwtService
         {
             Subject = new ClaimsIdentity(new Claim[]
             {
-                new Claim(ClaimTypes.Name, id)
+                new Claim(ClaimTypes.Name, id),
             }),
             Expires = DateTime.UtcNow.AddMinutes(expiresInMinutes),
-            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
         };
         var token = tokenHandler.CreateToken(tokenDescriptor);
         var tokenString = tokenHandler.WriteToken(token);
@@ -71,17 +70,17 @@ public class JwtService : IJwtService
             IssuerSigningKey = new SymmetricSecurityKey(key),
             ValidateIssuer = false,
             ValidateAudience = false,
-            ClockSkew = TimeSpan.Zero
+            ClockSkew = TimeSpan.Zero,
         };
 
         try
         {
-            SecurityToken validatedToken;
-            var principal = tokenHandler.ValidateToken(token, validationParameters, out validatedToken);
+            var principal = tokenHandler.ValidateToken(token, validationParameters, out SecurityToken validatedToken);
             if (IsTokenRevoked(token))
             {
                 throw new SecurityTokenException("Token has been revoked.");
             }
+
             return principal;
         }
         catch (SecurityTokenException ex)
@@ -90,7 +89,6 @@ public class JwtService : IJwtService
             throw new SecurityTokenException("Token validation failed.", ex);
         }
     }
-
 
     /// <summary>
     /// Revokes the provided JWT token.
@@ -126,6 +124,7 @@ public class JwtService : IJwtService
             {
                 return true;
             }
+
             return false;
         }
     }

@@ -1,10 +1,10 @@
-﻿using AutoMapper;
-using BoatApi.Dtos;
-using BoatApi.Models;
-using BoatApi.Repositories;
-
-namespace BoatApi.Services
+﻿namespace BoatApi.Services
 {
+    using AutoMapper;
+    using BoatApi.Dtos;
+    using BoatApi.Models;
+    using BoatApi.Repositories;
+
     public class BoatService : IBoatService
     {
         private readonly IMapper _mapper;

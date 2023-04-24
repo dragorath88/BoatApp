@@ -1,3 +1,5 @@
+#pragma warning disable SA1200 // Using directives should be placed correctly
+using System.Text;
 using AutoMapper;
 using BoatApi.Data;
 using BoatApi.Dtos;
@@ -11,7 +13,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System.Text;
+#pragma warning restore SA1200 // Using directives should be placed correctly
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -73,6 +75,7 @@ builder.Services.AddSingleton(mapperConfig.CreateMapper());
 // Add JWT authentication
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
 var jwtSettings = builder.Configuration.GetSection("Jwt").Get<JwtSettings>();
+
 // JwtSettings dependency injection
 builder.Services.AddSingleton(jwtSettings);
 
@@ -92,7 +95,7 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(key),
         ValidateIssuer = false,
         ValidateAudience = false,
-        ClockSkew = TimeSpan.Zero
+        ClockSkew = TimeSpan.Zero,
     };
 });
 
@@ -121,7 +124,7 @@ builder.Services.AddSwaggerGen(c =>
         In = ParameterLocation.Header,
         Type = SecuritySchemeType.Http,
         Scheme = "bearer",
-        Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
+        Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" },
     };
     c.AddSecurityDefinition("Bearer", securityScheme);
 
@@ -130,8 +133,8 @@ builder.Services.AddSwaggerGen(c =>
     {
         {
             securityScheme,
-            new string[] { }
-        }
+            Array.Empty<string>()
+        },
     });
 });
 
