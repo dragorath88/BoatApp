@@ -1,7 +1,9 @@
 ﻿namespace BoatAppApi.Middleware
 {
     using System;
+    using System.Text.Json;
     using System.Threading.Tasks;
+    using BoatAppApi.Models;
     using BoatAppApi.Services;
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.Configuration;
@@ -41,8 +43,15 @@
                     if (jwtService.IsTokenRevoked(token))
                     {
                         // Return a 401 Unauthorized response if the token is revoked
+                        var errorResponse = new ErrorResponse
+                        {
+                            Code = "INVALID_TOKEN",
+                            Message = "The token is invalid",
+                        };
+                        var errorResponseJson = JsonSerializer.Serialize(errorResponse);
                         context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                        await context.Response.WriteAsync("Token is revoked.");
+                        context.Response.ContentType = "application/json";
+                        await context.Response.WriteAsync(errorResponseJson);
                         return;
                     }
 
