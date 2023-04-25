@@ -1,7 +1,14 @@
-.table-container {
-  height: 100%;
+.boats-list {
   display: flex;
   flex-direction: column;
+  gap: 2rem;
+  padding-inline: 40px;
+  margin-block-start: 40px;
+  margin-inline: auto;
+
+  h1 {
+    font-size: 35px;
+  }
 
   mat-table {
     flex: 1;
@@ -17,6 +24,12 @@
         margin-bottom: 10px;
       }
     }
+  }
+
+  .btn-add {
+    background-color: #2a76d2;
+    color: #fff;
+    border: 1px solid #2a76d2;
   }
 
   .mat-paginator {
