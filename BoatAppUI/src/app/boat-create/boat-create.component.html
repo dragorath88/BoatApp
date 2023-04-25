@@ -1,7 +1,7 @@
-<div class="container">
-  <h1>New Boat</h1>
-  <form [formGroup]="boatForm" class="boat-form">
-    <mat-form-field class="form-field">
+<div class="boat-create">
+  <h1>Add Boat</h1>
+  <form [formGroup]="boatForm" class="flex flex-col gap-4">
+    <mat-form-field>
       <mat-label>Name</mat-label>
       <input matInput formControlName="name" required />
       <mat-error *ngIf="boatForm.get('name')?.hasError('required')">
@@ -9,7 +9,7 @@
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field class="form-field">
+    <mat-form-field>
       <mat-label>Description</mat-label>
       <textarea matInput formControlName="description" required></textarea>
       <mat-error *ngIf="boatForm.get('description')?.hasError('required')">
@@ -17,12 +17,12 @@
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field class="form-field">
+    <mat-form-field>
       <mat-label>Type</mat-label>
       <input matInput formControlName="type" />
     </mat-form-field>
 
-    <mat-form-field class="form-field">
+    <mat-form-field>
       <mat-label>Length</mat-label>
       <input matInput formControlName="length" pattern="[0-9]*" />
       <mat-error
@@ -35,12 +35,12 @@
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field class="form-field">
+    <mat-form-field>
       <mat-label>Brand</mat-label>
       <input matInput formControlName="brand" />
     </mat-form-field>
 
-    <mat-form-field class="form-field">
+    <mat-form-field>
       <mat-label>Year</mat-label>
       <input matInput formControlName="year" pattern="[0-9]*" />
       <mat-error
@@ -53,12 +53,12 @@
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field class="form-field">
+    <mat-form-field>
       <mat-label>Engine Type</mat-label>
       <input matInput formControlName="engineType" />
     </mat-form-field>
 
-    <mat-form-field class="form-field">
+    <mat-form-field>
       <mat-label>Fuel Capacity</mat-label>
       <input matInput formControlName="fuelCapacity" pattern="[0-9]*" />
       <mat-error
@@ -71,7 +71,7 @@
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field class="form-field">
+    <mat-form-field>
       <mat-label>Water Capacity</mat-label>
       <input matInput formControlName="waterCapacity" pattern="[0-9]*" />
       <mat-error
@@ -85,15 +85,17 @@
     </mat-form-field>
   </form>
 
-  <div class="actions">
+  <div class="flex gap-4 justify-end">
+    <button mat-stroked-button class="btn-cancel" (click)="onCancel()">
+      Cancel
+    </button>
     <button
       mat-raised-button
-      color="primary"
+      class="btn-create"
       (click)="createBoat()"
       [disabled]="boatForm.invalid"
     >
       Create
     </button>
-    <button mat-raised-button color="warn" (click)="onCancel()">Cancel</button>
   </div>
 </div>
