@@ -7,6 +7,7 @@ using BoatApi.Models;
 using BoatApi.Repositories;
 using BoatApi.Services;
 using BoatAppApi.Config;
+using BoatAppApi.Middleware;
 using BoatAppApi.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -84,6 +85,9 @@ builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultSignOutScheme = JwtBearerDefaults.AuthenticationScheme;
 })
 .AddJwtBearer(options =>
 {
@@ -95,7 +99,7 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(key),
         ValidateIssuer = false,
         ValidateAudience = false,
-        ClockSkew = TimeSpan.Zero,
+        ClockSkew = TimeSpan.FromSeconds(30), // Allow for a small time difference between server and client machines
     };
 });
 
@@ -153,6 +157,9 @@ if (app.Environment.IsDevelopment())
 
 // Use HTTPS redirection
 app.UseHttpsRedirection();
+
+// Check if the Jwt is still valid
+app.UseMiddleware<JwtAuthenticationMiddleware>();
 
 // Use authentication and authorization
 app.UseAuthentication();

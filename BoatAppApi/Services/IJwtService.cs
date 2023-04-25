@@ -33,6 +33,13 @@
         void RevokeToken(string token);
 
         /// <summary>
+        /// Gets the expiration time of the provided JWT token.
+        /// </summary>
+        /// <param name="token">The JWT token.</param>
+        /// <returns>The token's expiration time as a DateTimeOffset.</returns>
+        DateTimeOffset GetTokenExpirationTime(string token);
+
+        /// <summary>
         /// Checks if the provided JWT token has been revoked.
         /// </summary>
         /// <param name="token">The JWT token to check.</param>
