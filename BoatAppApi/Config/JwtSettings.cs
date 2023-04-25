@@ -1,18 +1,28 @@
 ﻿namespace BoatAppApi.Config
 {
-    // Represents the settings used to configure JWT authentication
+    /// <summary>
+    /// Represents the settings used to configure JWT authentication.
+    ///
     public class JwtSettings
     {
-        // Gets or sets the secret key used to sign JWT tokens
+        /// <summary>
+        /// Gets or sets the secret key used to sign JWT tokens.
+        /// </summary>
         public string Secret { get; set; }
 
-        // Gets or sets the number of minutes after which a token will expire
+        /// <summary>
+        /// Gets or sets the number of minutes after which a token will expire.
+        /// </summary>
         public int ExpiresInMinutes { get; set; }
 
-        // Gets or sets the issuer of JWT tokens
+        /// <summary>
+        /// Gets or sets the issuer of JWT tokens.
+        /// </summary>
         public string Issuer { get; set; }
 
-        // Gets or sets the audience of JWT tokens
+        /// <summary>
+        /// Gets or sets the audience of JWT tokens.
+        /// </summary>
         public string Audience { get; set; }
     }
 }

@@ -1,10 +1,10 @@
-﻿using AutoMapper;
-using BoatApi.Dtos;
-using BoatApi.Models;
-using BoatApi.Repositories;
-
-namespace BoatApi.Services
+﻿namespace BoatApi.Services
 {
+    using AutoMapper;
+    using BoatApi.Dtos;
+    using BoatApi.Models;
+    using BoatApi.Repositories;
+
     public class BoatService : IBoatService
     {
         private readonly IMapper _mapper;
@@ -50,7 +50,6 @@ namespace BoatApi.Services
             try
             {
                 var boat = _mapper.Map<Boat>(createBoatDto);
-                boat.Id = Guid.NewGuid();
 
                 var createdBoat = await _boatRepository.CreateAsync(boat);
 

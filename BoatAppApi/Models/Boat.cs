@@ -1,12 +1,12 @@
 ﻿namespace BoatApi.Models
 {
+    using System.ComponentModel.DataAnnotations;
+
     /// <summary>
     /// Represents a boat in the application.
     /// </summary>
     public class Boat
     {
-        #region Properties
-
         /// <summary>
         /// Gets or sets the unique identifier for the boat.
         /// </summary>
@@ -15,11 +15,13 @@
         /// <summary>
         /// Gets or sets the name of the boat.
         /// </summary>
+        [Required]
         public string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the description of the boat.
         /// </summary>
+        [Required]
         public string Description { get; set; }
 
         /// <summary>
@@ -56,8 +58,5 @@
         /// Gets or sets the amount of fresh water the boat can hold, measured in liters.
         /// </summary>
         public int WaterCapacity { get; set; }
-
-        #endregion
     }
 }
-

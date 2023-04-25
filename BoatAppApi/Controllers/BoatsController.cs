@@ -1,10 +1,10 @@
-﻿using BoatApi.Dtos;
-using BoatApi.Services;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-
-namespace BoatApi.Controllers
+﻿namespace BoatApi.Controllers
 {
+    using BoatApi.Dtos;
+    using BoatApi.Services;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+
     [ApiController]
     [Route("api/[controller]")]
     public class BoatsController : ControllerBase
@@ -67,6 +67,7 @@ namespace BoatApi.Controllers
                 {
                     return NotFound();
                 }
+
                 return Ok(boat);
             }
             catch (Exception ex)

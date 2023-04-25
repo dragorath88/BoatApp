@@ -1,9 +1,9 @@
-﻿using BoatApi.Data;
-using BoatApi.Models;
-using Microsoft.EntityFrameworkCore;
-
-namespace BoatApi.Repositories
+﻿namespace BoatApi.Repositories
 {
+    using BoatApi.Data;
+    using BoatApi.Models;
+    using Microsoft.EntityFrameworkCore;
+
     public class BoatRepository : IBoatRepository
     {
         private readonly BoatApiDbContext _dbContext;
@@ -18,7 +18,7 @@ namespace BoatApi.Repositories
             return await _dbContext.Boats.ToListAsync();
         }
 
-        public async Task<Boat> GetByIdAsync(Guid id)
+        public async Task<Boat?> GetByIdAsync(Guid id)
         {
             return await _dbContext.Boats.FindAsync(id);
         }

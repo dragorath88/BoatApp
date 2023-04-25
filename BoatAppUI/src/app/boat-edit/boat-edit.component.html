@@ -1,7 +1,7 @@
-<div *ngIf="isDataLoaded" class="container">
+<div *ngIf="isDataLoaded" class="boat-update">
   <h1>Edit Boat</h1>
-  <form [formGroup]="boatForm" class="boat-form">
-    <mat-form-field class="form-field">
+  <form [formGroup]="boatForm" class="flex flex-col gap-4">
+    <mat-form-field>
       <mat-label>Name</mat-label>
       <input matInput formControlName="name" required />
       <mat-error *ngIf="boatForm.get('name')?.hasError('required')">
@@ -9,71 +9,94 @@
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field class="form-field">
+    <mat-form-field>
       <mat-label>Description</mat-label>
-      <input matInput formControlName="description" required />
+      <textarea matInput formControlName="description" required></textarea>
       <mat-error *ngIf="boatForm.get('description')?.hasError('required')">
         Description is required.
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field class="form-field">
+    <mat-form-field>
       <mat-label>Type</mat-label>
       <input matInput formControlName="type" />
     </mat-form-field>
 
-    <mat-form-field class="form-field">
+    <mat-form-field>
       <mat-label>Length</mat-label>
       <input matInput formControlName="length" pattern="[0-9]*" />
-      <mat-error *ngIf="boatForm.get('length')?.hasError('pattern')">
+      <mat-error
+        *ngIf="
+          boatForm.get('length')?.hasError('pattern') ||
+          boatForm.get('length')?.hasError('nullValue')
+        "
+      >
         Length must be a number.
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field class="form-field">
+    <mat-form-field>
       <mat-label>Brand</mat-label>
       <input matInput formControlName="brand" />
     </mat-form-field>
 
-    <mat-form-field class="form-field">
+    <mat-form-field>
       <mat-label>Year</mat-label>
       <input matInput formControlName="year" pattern="[0-9]*" />
-      <mat-error *ngIf="boatForm.get('year')?.hasError('pattern')">
+      <mat-error
+        *ngIf="
+          boatForm.get('year')?.hasError('pattern') ||
+          boatForm.get('year')?.hasError('nullValue')
+        "
+      >
         Year must be a number.
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field class="form-field">
+    <mat-form-field>
       <mat-label>Engine Type</mat-label>
       <input matInput formControlName="engineType" />
     </mat-form-field>
 
-    <mat-form-field class="form-field">
+    <mat-form-field>
       <mat-label>Fuel Capacity</mat-label>
       <input matInput formControlName="fuelCapacity" pattern="[0-9]*" />
-      <mat-error *ngIf="boatForm.get('fuelCapacity')?.hasError('pattern')">
+      <mat-error
+        *ngIf="
+          boatForm.get('fuelCapacity')?.hasError('pattern') ||
+          boatForm.get('fuelCapacity')?.hasError('nullValue')
+        "
+      >
         FuelCapacity must be a number.
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field class="form-field">
+    <mat-form-field>
       <mat-label>Water Capacity</mat-label>
       <input matInput formControlName="waterCapacity" pattern="[0-9]*" />
-      <mat-error *ngIf="boatForm.get('waterCapacity')?.hasError('pattern')">
+      <mat-error
+        *ngIf="
+          boatForm.get('waterCapacity')?.hasError('pattern') ||
+          boatForm.get('waterCapacity')?.hasError('nullValue')
+        "
+      >
         WaterCapacity must be a number.
       </mat-error>
     </mat-form-field>
   </form>
-  <div class="actions">
+
+  <div class="flex gap-4 justify-end">
+    <button mat-stroked-button class="btn-cancel" (click)="onCancel()">
+      Cancel
+    </button>
     <button
       mat-raised-button
-      color="primary"
+      class="btn-update"
       (click)="updateBoat()"
       [disabled]="boatForm.invalid"
     >
       Update
     </button>
-    <button mat-raised-button color="warn" (click)="onCancel()">Cancel</button>
   </div>
 </div>
 

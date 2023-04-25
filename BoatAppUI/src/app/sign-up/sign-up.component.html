@@ -94,7 +94,7 @@
         </div>
       </div>
       <!-- Right -->
-      <div class="flex flex-col dm-sm:mx-8 right-side gap-3">
+      <div class="flex flex-col dm-sm:mx-8 right-side">
         <div
           class="flex flex-col m-auto items-center justify-center rounded-full right-side__dm-icon"
         >
@@ -102,46 +102,97 @@
         </div>
         <div class="flex flex-col gap-4 mb-8 dm-header">
           <div class="flex-1 text-center text-3xl font-medium dm-header__title">
-            Welcome back!
+            Welcome!
           </div>
           <div class="text-center dm-header__subtitle">
             The Swiss platform for efficient management of your boat fleet.
           </div>
         </div>
         <!-- form -->
-        <div class="flex flex-col gap-6">
-          <form (ngSubmit)="onSubmit()" autocomplete="off" class="w-full">
+        <div class="flex flex-col gap-2">
+          <form
+            [formGroup]="signUpForm"
+            autocomplete="off"
+            class="flex flex-col gap-2 w-full"
+          >
             <mat-form-field class="w-full">
-              <input
-                matInput
-                type="text"
-                name="username"
-                [(ngModel)]="username"
-                placeholder="Username"
-                required
-              />
+              <mat-label>Username</mat-label>
+              <input matInput formControlName="username" required />
               <mat-icon class="form-icon" matPrefix>person</mat-icon>
+              <mat-error
+                *ngIf="signUpForm.get('username')?.hasError('required')"
+              >
+                UserName is required.
+              </mat-error>
             </mat-form-field>
+
             <mat-form-field class="w-full">
+              <mat-label>Password</mat-label>
               <input
                 matInput
+                formControlName="password"
                 type="password"
-                name="password"
-                [(ngModel)]="password"
-                placeholder="Password"
                 required
               />
               <mat-icon class="form-icon" matPrefix>lock</mat-icon>
+              <mat-error
+                *ngIf="signUpForm.get('password')?.hasError('required')"
+              >
+                Password is required.
+              </mat-error>
             </mat-form-field>
-            <div class="text-right">
-              <button mat-raised-button class="signin w-full" type="submit">
-                Sign In
-              </button>
-            </div>
+
+            <mat-form-field class="w-full">
+              <mat-label>Confirm password</mat-label>
+              <input
+                matInput
+                formControlName="confirmpassword"
+                type="password"
+                required
+              />
+              <mat-icon class="form-icon" matPrefix>lock</mat-icon>
+              <mat-error
+                *ngIf="
+                  signUpForm
+                    .get('confirmpassword')
+                    ?.hasError('passwordsDoNotMatch')
+                "
+              >
+                Passwords do not match
+              </mat-error>
+            </mat-form-field>
+            <mat-card-actions>
+              <div class="text-right">
+                <button
+                  mat-raised-button
+                  class="signup w-full"
+                  (click)="onSubmit()"
+                  [disabled]="signUpForm.invalid"
+                >
+                  Sign Up
+                </button>
+              </div>
+            </mat-card-actions>
           </form>
-          <div class="px-2 py-6 rounded text-center signup-container">
-            Don't have an account? <span routerLink="/sign-up">Sign Up</span>
-          </div>
+          <mat-error
+            @fadeInUp
+            *ngIf="signUpForm.get('password')?.hasError('pattern')"
+          >
+            <div class="dm-password-feedback-box">
+              <div class="dm-password-feedback-box__icon">
+                <mat-icon>information</mat-icon>
+              </div>
+              <div>
+                <div>
+                  Password must contain at least 8 characters and at least :
+                </div>
+                <div>One uppercase letter</div>
+                <div>One lowercase letter</div>
+                <div>One number</div>
+                <div>One special character (@$!%*?&)</div>
+              </div>
+            </div>
+          </mat-error>
         </div>
       </div>
     </div>

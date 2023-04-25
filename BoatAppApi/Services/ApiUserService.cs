@@ -1,9 +1,10 @@
-﻿using BoatApi.Models;
-using BoatAppApi.Services;
-using Microsoft.AspNetCore.Identity;
-
-namespace BoatApi.Services
+﻿namespace BoatApi.Services
 {
+    using System.Security.Authentication;
+    using BoatApi.Models;
+    using BoatAppApi.Services;
+    using Microsoft.AspNetCore.Identity;
+
     /// <summary>
     /// Service for interacting with the API users.
     /// </summary>
@@ -38,7 +39,7 @@ namespace BoatApi.Services
                     return user;
                 }
 
-                return null;
+                throw new AuthenticationException("Authentication failed. Please check your username and password.");
             }
             catch (Exception ex)
             {
@@ -53,7 +54,7 @@ namespace BoatApi.Services
         /// </summary>
         /// <param name="id">The id of the user to retrieve.</param>
         /// <returns>The user with the specified id, or null if not found.</returns>
-        public async Task<BoatApiUser> GetUserByIdAsync(string id)
+        public async Task<BoatApiUser?> GetUserByIdAsync(string id)
         {
             try
             {

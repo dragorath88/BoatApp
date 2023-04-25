@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
+// interface for the data to display in the modal
 interface FieldValuePair {
   field: string;
   value: string;
@@ -19,6 +20,7 @@ export class BoatDetailModalComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
 
+  // initialize the data to be displayed in the modal
   ngOnInit() {
     this.displayedData = [
       { field: 'Name', value: this.data.name },
@@ -33,6 +35,7 @@ export class BoatDetailModalComponent implements OnInit {
     ];
   }
 
+  // close the modal
   onClose(): void {
     this.dialogRef.close();
   }

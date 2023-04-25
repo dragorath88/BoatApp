@@ -1,13 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace BoatApi.Dtos
+﻿namespace BoatApi.Dtos
 {
+    using System.ComponentModel.DataAnnotations;
+
     /// <summary>
     /// DTO used to create a new boat entity.
     /// </summary>
     public class BoatDto
     {
-        #region Properties
 
         /// <summary>
         /// The unique identifier for the boat.
@@ -60,7 +59,5 @@ namespace BoatApi.Dtos
         /// The water capacity of the boat.
         /// </summary>
         public int WaterCapacity { get; set; }
-
-        #endregion
     }
 }

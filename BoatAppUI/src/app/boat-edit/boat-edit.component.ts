@@ -1,6 +1,12 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  AbstractControl,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 import { IBoat } from '../interfaces/boat/iboat';
 import { BoatApiService } from '../services/boat-api/boat-api.service';
@@ -11,8 +17,8 @@ import { BoatApiService } from '../services/boat-api/boat-api.service';
   styleUrls: ['./boat-edit.component.scss'],
 })
 export class BoatEditComponent implements OnInit, AfterViewInit {
+  // Initialize variables
   boatForm!: FormGroup;
-
   boat: IBoat = {
     id: '',
     name: '',
@@ -25,8 +31,8 @@ export class BoatEditComponent implements OnInit, AfterViewInit {
     fuelCapacity: 0,
     waterCapacity: 0,
   };
-
   @ViewChild('form', { static: false }) form: any;
+  isDataLoaded = false;
 
   constructor(
     private _activatedRoute: ActivatedRoute,
@@ -35,28 +41,43 @@ export class BoatEditComponent implements OnInit, AfterViewInit {
     private _formBuilder: FormBuilder
   ) {}
 
-  isDataLoaded = false;
-
   ngOnInit() {
+    // Subscribe to the route params to load the boat
     this._activatedRoute.params.subscribe((params) => {
       this.loadBoat(params['id']);
     });
 
+    // Initialize the form
     this.boatForm = this._formBuilder.group({
       name: ['', [Validators.required]],
       description: ['', [Validators.required]],
       type: [''],
-      length: ['', [Validators.pattern('^[0-9]*$')]],
+      length: [0, [this.nullValidatorOrPattern('^[0-9]*$')]],
       brand: [''],
-      year: ['', [Validators.pattern('^[0-9]*$')]],
+      year: [0, [this.nullValidatorOrPattern('^[0-9]*$')]],
       engineType: [''],
-      fuelCapacity: ['', [Validators.pattern('^[0-9]*$')]],
-      waterCapacity: ['', [Validators.pattern('^[0-9]*$')]],
+      fuelCapacity: [0, [this.nullValidatorOrPattern('^[0-9]*$')]],
+      waterCapacity: [0, [this.nullValidatorOrPattern('^[0-9]*$')]],
     });
   }
 
-  async ngAfterViewInit() {}
+  ngAfterViewInit() {
+    // Implement any logic that needs the view to be initialized
+  }
 
+  // Custom validator function to disallow null values
+  nullValidatorOrPattern(pattern: string): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      if (control.value === null || control.value === '') {
+        return { nullValue: true };
+      } else if (pattern && !RegExp(pattern).test(control.value)) {
+        return { pattern: true };
+      }
+      return null;
+    };
+  }
+
+  // Load the boat from the API and set the form values
   async loadBoat(id: string) {
     try {
       const boat: IBoat = await firstValueFrom(
@@ -82,6 +103,12 @@ export class BoatEditComponent implements OnInit, AfterViewInit {
     }
   }
 
+  /**
+   * Update the boat on the API.
+   * If the form is invalid, returns without doing anything.
+   * If an error occurs, logs the error to the console.
+   * If the update is successful, navigates to the "/boats-list" page.
+   */
   async updateBoat() {
     try {
       if (this.boatForm.invalid) {
@@ -102,6 +129,9 @@ export class BoatEditComponent implements OnInit, AfterViewInit {
     }
   }
 
+  /**
+   * Navigates to the "/boats-list" page.
+   */
   onCancel() {
     this._router.navigate(['/boats-list']);
   }

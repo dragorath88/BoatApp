@@ -1,8 +1,18 @@
 import { Component } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ValidatorFn,
+  AbstractControl,
+} from '@angular/forms';
 import { Router } from '@angular/router';
+
 import { BoatApiService } from '../services/boat-api/boat-api.service';
 
+/**
+ * Component for creating a new boat.
+ */
 @Component({
   selector: 'app-boat-create',
   templateUrl: './boat-create.component.html',
@@ -16,34 +26,57 @@ export class BoatCreateComponent {
     private _boatApiService: BoatApiService,
     private _router: Router
   ) {
+    // Initialize the form
     this.boatForm = this._formBuilder.group({
       name: ['', [Validators.required]],
       description: ['', [Validators.required]],
       type: [''],
-      length: ['', [Validators.pattern('^[0-9]*$')]],
+      length: [0, [this.nullValidatorOrPattern('^[0-9]*$')]],
       brand: [''],
-      year: ['', [Validators.pattern('^[0-9]*$')]],
+      year: [0, [this.nullValidatorOrPattern('^[0-9]*$')]],
       engineType: [''],
-      fuelCapacity: ['', [Validators.pattern('^[0-9]*$')]],
-      waterCapacity: ['', [Validators.pattern('^[0-9]*$')]],
+      fuelCapacity: [0, [this.nullValidatorOrPattern('^[0-9]*$')]],
+      waterCapacity: [0, [this.nullValidatorOrPattern('^[0-9]*$')]],
     });
   }
 
-  createBoat() {
+  /**
+   * Custom validator function to disallow null values.
+   */
+  nullValidatorOrPattern(pattern: string): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      if (control.value === null || control.value === '') {
+        return { nullValue: true };
+      } else if (pattern && !RegExp(pattern).test(control.value)) {
+        return { pattern: true };
+      }
+      return null;
+    };
+  }
+
+  /**
+   * Submits the form data to create a new boat.
+   * If an error occurs, logs the error to the console.
+   */
+  createBoat(): void {
     if (this.boatForm.invalid) {
       return;
     }
 
-    try {
-      this._boatApiService.create(this.boatForm.value).subscribe(() => {
+    this._boatApiService.create(this.boatForm.value).subscribe({
+      next: () => {
         this._router.navigate(['/boats-list']);
-      });
-    } catch (error) {
-      console.error('Error:', error);
-    }
+      },
+      error: (error) => {
+        console.error('Error:', error);
+      },
+    });
   }
 
-  onCancel() {
+  /**
+   * Navigates back to the boats list.
+   */
+  onCancel(): void {
     this._router.navigate(['/boats-list']);
   }
 }

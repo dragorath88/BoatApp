@@ -5,6 +5,12 @@ VisualStudioVersion = 17.5.33530.505
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BoatAppApi", "BoatAppApi\BoatAppApi.csproj", "{1ED7D587-F6B4-4527-A335-F9805711244F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{34FA84DA-3639-4454-9F90-FB2C2E620E20}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		stylecop.json = stylecop.json
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

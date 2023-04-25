@@ -1,16 +1,15 @@
-﻿using BoatAppApi.Services;
-using Microsoft.Extensions.Caching.Memory;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using BoatAppApi.Services;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.IdentityModel.Tokens;
 
 public class JwtService : IJwtService
 {
+    private const string RevokedTokensKey = "revokedTokens";
     private readonly IMemoryCache _cache;
     private readonly ILogger<JwtService> _logger;
-    private const string RevokedTokensKey = "revokedTokens";
-
 
     public JwtService(IMemoryCache cache, ILogger<JwtService> logger)
     {
@@ -21,11 +20,12 @@ public class JwtService : IJwtService
     /// <summary>
     /// Generates a JWT token for the provided id with the given expiration time and secret key.
     /// </summary>
-    /// <param name="id">The user api id to create the token.</param>
+    /// <param name="userId">The user api id to create the token.</param>
+    /// <param name="userName">The user api userName to create the token.</param>
     /// <param name="expiresInMinutes">The number of minutes until the token expires.</param>
     /// <param name="secretKey">The secret key used to sign the token.</param>
     /// <returns>The generated JWT token as a string.</returns>
-    public string GenerateToken(string id, int expiresInMinutes, string secretKey)
+    public string GenerateToken(string userId, string userName, int expiresInMinutes, string secretKey)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.ASCII.GetBytes(secretKey);
@@ -33,10 +33,11 @@ public class JwtService : IJwtService
         {
             Subject = new ClaimsIdentity(new Claim[]
             {
-                new Claim(ClaimTypes.Name, id)
+                new Claim(ClaimTypes.NameIdentifier, userId),
+                new Claim(ClaimTypes.Name, userName),
             }),
-            Expires = DateTime.UtcNow.AddMinutes(expiresInMinutes),
-            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            Expires = DateTimeOffset.UtcNow.AddMinutes(expiresInMinutes).UtcDateTime,
+            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
         };
         var token = tokenHandler.CreateToken(tokenDescriptor);
         var tokenString = tokenHandler.WriteToken(token);
@@ -71,17 +72,17 @@ public class JwtService : IJwtService
             IssuerSigningKey = new SymmetricSecurityKey(key),
             ValidateIssuer = false,
             ValidateAudience = false,
-            ClockSkew = TimeSpan.Zero
+            ClockSkew = TimeSpan.FromSeconds(30), // Allow for a small time difference between server and client machines
         };
 
         try
         {
-            SecurityToken validatedToken;
-            var principal = tokenHandler.ValidateToken(token, validationParameters, out validatedToken);
+            var principal = tokenHandler.ValidateToken(token, validationParameters, out SecurityToken validatedToken);
             if (IsTokenRevoked(token))
             {
                 throw new SecurityTokenException("Token has been revoked.");
             }
+
             return principal;
         }
         catch (SecurityTokenException ex)
@@ -91,22 +92,18 @@ public class JwtService : IJwtService
         }
     }
 
-
     /// <summary>
     /// Revokes the provided JWT token.
     /// </summary>
     /// <param name="token">The JWT token to revoke.</param>
     public void RevokeToken(string token)
     {
-        _cache.GetOrCreate(GetRevokedTokensKey(), entry => new List<string>());
-        var revokedTokens = _cache.Get<List<string>>(GetRevokedTokensKey());
+        _cache.GetOrCreate(GetRevokedTokensKey(), entry => new HashSet<string>());
+        var revokedTokens = _cache.Get<HashSet<string>>(GetRevokedTokensKey());
 
         lock (revokedTokens)
         {
-            if (!revokedTokens.Contains(token))
-            {
-                revokedTokens.Add(token);
-            }
+            revokedTokens.Add(token);
         }
     }
 
@@ -114,20 +111,13 @@ public class JwtService : IJwtService
     /// Checks if the provided JWT token has been revoked.
     /// </summary>
     /// <param name="token">The JWT token to check.</param>
-    /// <returns>True if the token has been revoked, false otherwise.</returns
+    /// <returns>True if the token has been revoked, false otherwise.</returns>
     public bool IsTokenRevoked(string token)
     {
-        _cache.GetOrCreate(GetRevokedTokensKey(), entry => new List<string>());
-        var revokedTokens = _cache.Get<List<string>>(GetRevokedTokensKey());
+        _cache.GetOrCreate(GetRevokedTokensKey(), entry => new HashSet<string>());
+        var revokedTokens = _cache.Get<HashSet<string>>(GetRevokedTokensKey());
 
-        lock (revokedTokens)
-        {
-            if (revokedTokens.Contains(token))
-            {
-                return true;
-            }
-            return false;
-        }
+        return revokedTokens.Contains(token);
     }
 
     /// <summary>
@@ -136,15 +126,6 @@ public class JwtService : IJwtService
     /// <returns>The key for storing revoked tokens in the cache.</returns>
     private string GetRevokedTokensKey()
     {
-        try
-        {
-            return $"{RevokedTokensKey}-{DateTime.UtcNow.Date:yyyyMMdd}";
-        }
-        catch (Exception ex)
-        {
-            // Log the exception here
-            _logger.LogError(ex, "An exception occurred while getting the revoked tokens key.");
-            throw;
-        }
+        return $"{RevokedTokensKey}-{DateTimeOffset.UtcNow:yyyyMMdd}";
     }
 }
