@@ -6,7 +6,7 @@ import {
   HttpEvent,
   HttpErrorResponse,
 } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
@@ -20,15 +20,12 @@ export class HttpErrorInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(
-      catchError((error) => {
+      catchError((error: HttpErrorResponse): Observable<never> => {
         if (error.status === 401 && error.error.Code === 'INVALID_TOKEN') {
           this.authService.clearToken();
           this.router.navigateByUrl('/sign-in');
-        } else {
-          console.log('Error:', error);
         }
-        // Don't throw the error here
-        return new Observable<HttpEvent<any>>();
+        return throwError(() => error);
       })
     );
   }
