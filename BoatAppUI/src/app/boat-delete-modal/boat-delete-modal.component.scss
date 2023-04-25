@@ -1,0 +1,16 @@
+.dm-delete-modal {
+  &__delete-icon {
+    background-color: hsla(4 90% 96% / 100%);
+    .mat-icon {
+      color: #f44336;
+    }
+  }
+
+  .btn-close {
+    color: #808080;
+  }
+}
+
+.btn-cancel {
+  color: #808080;
+}

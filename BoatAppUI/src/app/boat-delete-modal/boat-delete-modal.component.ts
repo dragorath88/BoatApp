@@ -13,6 +13,7 @@ import { BoatApiService } from '../services/boat-api/boat-api.service';
 @Component({
   selector: 'app-boat-delete-modal',
   templateUrl: './boat-delete-modal.component.html',
+  styleUrls: ['./boat-delete-modal.component.scss'],
 })
 export class BoatDeleteModalComponent {
   constructor(

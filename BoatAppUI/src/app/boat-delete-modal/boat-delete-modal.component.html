@@ -1,9 +1,23 @@
-<h2 mat-dialog-title>Confirm Delete</h2>
-<div mat-dialog-content>
-  Are you sure you want to delete <b>{{ data.name }}</b
-  >?
-</div>
-<div mat-dialog-actions align="end">
-  <button mat-button color="warn" (click)="onDelete()">Delete</button>
-  <button mat-button (click)="onCancel()">Cancel</button>
+<div class="flex flex-col gap-6 p-4">
+  <div class="flex items-center justify-center gap-4 dm-delete-modal">
+    <div
+      class="flex flex-col items-center justify-center p-2 rounded-full dm-delete-modal__delete-icon"
+    >
+      <mat-icon>delete</mat-icon>
+    </div>
+    <div class="flex-1 text-lg font-medium">Delete the boat ?</div>
+    <button mat-icon-button (click)="onCancel()">
+      <mat-icon class="btn-close">close</mat-icon>
+    </button>
+  </div>
+  <div mat-dialog-content>
+    You will permanently delete the following boat, <b>{{ data.name }}</b
+    >.<br />Are you sure you want to delete it?
+  </div>
+  <div mat-dialog-actions class="flex gap-4 justify-end">
+    <button mat-stroked-button class="btn-cancel" (click)="onCancel()">
+      Cancel
+    </button>
+    <button mat-raised-button color="warn" (click)="onDelete()">Delete</button>
+  </div>
 </div>
