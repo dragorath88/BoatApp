@@ -87,16 +87,16 @@ export class AuthService {
     }
   }
 
+  // Public functions
+
   /**
    * Clear the tokent and cancels the scheduled refresh of the token
    */
-  private clearToken() {
+  clearToken() {
     this.unscheduleRefreshToken();
     localStorage.removeItem(this._tokenKey);
     this._tokenSubject.next('');
   }
-
-  // Public functions
 
   /**
    * Signs in a user with a given username and password
