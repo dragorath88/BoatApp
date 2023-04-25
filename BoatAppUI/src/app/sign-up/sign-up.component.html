@@ -162,7 +162,7 @@
               </mat-error>
             </mat-form-field>
             <mat-card-actions>
-              <div class="text-right">
+              <div class="flex flex-col gap-2 text-right">
                 <button
                   mat-raised-button
                   class="signup w-full"
@@ -170,6 +170,13 @@
                   [disabled]="signUpForm.invalid"
                 >
                   Sign Up
+                </button>
+                <button
+                  mat-stroked-button
+                  class="cancel w-full"
+                  routerLink="/sign-in"
+                >
+                  Cancel
                 </button>
               </div>
             </mat-card-actions>

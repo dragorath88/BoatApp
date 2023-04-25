@@ -38,6 +38,7 @@ import { SignUpComponent } from './sign-up/sign-up.component';
 import { UserApiService } from './services/auth/user-api/user-api.service';
 import { JwtInterceptor } from './services/auth/jwt-interceptor.service';
 import { FadeInUpStaggerElementDirective } from './shared/animations/fade-in-up.animations';
+import { HttpErrorInterceptor } from './services/http/http-error-interceptor.service';
 
 @NgModule({
   declarations: [
@@ -82,6 +83,7 @@ import { FadeInUpStaggerElementDirective } from './shared/animations/fade-in-up.
     AuthService,
     UserApiService,
     AuthGuard,
+    { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: JwtInterceptor,

@@ -107,6 +107,5 @@ export class BoatsListComponent implements OnInit, AfterViewInit {
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
     this.showMobileColumns = event.target.innerWidth < this.screenSizeBreak;
-    console.log('showMobileColumns:', this.showMobileColumns);
   }
 }
