@@ -1,4 +1,7 @@
-<mat-sidenav-container class="sidenav-container">
+<mat-sidenav-container
+  class="sidenav-container"
+  style="display: flex; flex-direction: column-reverse"
+>
   <mat-sidenav
     #drawer
     class="sidenav"
@@ -7,17 +10,13 @@
     [mode]="(isHandset$ | async) ? 'over' : 'side'"
     [opened]="(isHandset$ | async) === false"
   >
-    <mat-toolbar>Menu</mat-toolbar>
+    <mat-toolbar class="dm-toolbar-menu">BM Application</mat-toolbar>
     <mat-nav-list>
-      <a mat-list-item routerLink="/boat-create">Create a Boat</a>
-      <a mat-list-item routerLink="/boats-list">List Boats</a>
+      <a mat-list-item routerLink="/boats-list">Boats</a>
     </mat-nav-list>
-    <button mat-raised-button color="primary" (click)="signOut()">
-      Sign out
-    </button>
   </mat-sidenav>
   <mat-sidenav-content>
-    <mat-toolbar color="primary">
+    <mat-toolbar class="dm-toolbar">
       <button
         type="button"
         aria-label="Toggle sidenav"
@@ -27,7 +26,10 @@
       >
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-      <span>Boats Management</span>
+      <span class="flex-1">Welcom Username</span>
+      <button mat-icon-button (click)="signOut()">
+        <mat-icon>logout</mat-icon>
+      </button>
     </mat-toolbar>
     <!-- Add Content Here -->
     <router-outlet></router-outlet>

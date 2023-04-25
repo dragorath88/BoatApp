@@ -1,13 +1,19 @@
 .sidenav-container {
   height: 100%;
+
+  .dm-toolbar {
+    background-color: #2a76d2;
+    color: #fff;
+  }
+
+  .dm-toolbar-menu {
+    background-color: #fff;
+    color: #000;
+  }
 }
 
 .sidenav {
-  width: 200px;
-}
-
-.sidenav .mat-toolbar {
-  background: inherit;
+  width: 250px;
 }
 
 .mat-toolbar.mat-primary {
