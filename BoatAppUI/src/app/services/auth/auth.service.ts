@@ -41,7 +41,9 @@ export class AuthService {
    * @returns True if the token is expired, false otherwise
    */
   private isTokenExpired(token: string): boolean {
-    const expiry = JSON.parse(atob(token.split('.')[1])).exp;
+    const expiry = parseInt(
+      JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString()).exp
+    );
     const now = new Date().getTime() / 1000;
     return expiry < now;
   }
@@ -83,6 +85,15 @@ export class AuthService {
     if (this._refreshTimer) {
       clearTimeout(this._refreshTimer);
     }
+  }
+
+  /**
+   * Clear the tokent and cancels the scheduled refresh of the token
+   */
+  private clearToken() {
+    this.unscheduleRefreshToken();
+    localStorage.removeItem(this._tokenKey);
+    this._tokenSubject.next('');
   }
 
   // Public functions
@@ -136,9 +147,7 @@ export class AuthService {
 
     return this._http.post(`${this._apiUrl}/logout`, null).pipe(
       tap(() => {
-        this.unscheduleRefreshToken();
-        localStorage.removeItem(this._tokenKey);
-        this._tokenSubject.next('');
+        this.clearToken();
         this._router.navigate(['/sign-in']);
       })
     );
@@ -177,11 +186,15 @@ export class AuthService {
   }
 
   /**
-   * Determines whether the current user is authenticated.
+   * Determines whether the current user is authenticated and clear the token if expired
    * @returns True if the user is authenticated, false otherwise
    */
   isAuthenticated(): boolean {
     const token = this.getToken();
+    const isAuthenticated = token != null && !this.isTokenExpired(token);
+    if (!isAuthenticated) {
+      this.clearToken();
+    }
     return token != null && !this.isTokenExpired(token);
   }
 }

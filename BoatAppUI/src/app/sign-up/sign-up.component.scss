@@ -8,7 +8,7 @@
   .main-content {
     .left-side {
       width: 700px;
-      height: 700px;
+      height: 720px;
       background-size: 750px;
       background-position: center;
       background-repeat: no-repeat;
@@ -53,6 +53,11 @@
           color: rgba(0, 0, 0, 0.38);
           border: 1px solid transparent;
         }
+      }
+
+      .cancel {
+        border: 1px solid #2a76d2;
+        color: #2a76d2;
       }
 
       .dm-header {
