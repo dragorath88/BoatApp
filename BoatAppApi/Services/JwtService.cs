@@ -121,6 +121,25 @@ public class JwtService : IJwtService
     }
 
     /// <summary>
+    /// Gets the expiration time of the provided JWT token.
+    /// </summary>
+    /// <param name="token">The JWT token.</param>
+    /// <returns>The token's expiration time as a DateTimeOffset.</returns>
+    public DateTimeOffset GetTokenExpirationTime(string token)
+    {
+        if (string.IsNullOrEmpty(token))
+        {
+            throw new ArgumentException("Token cannot be null or empty.", nameof(token));
+        }
+
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var jwtToken = tokenHandler.ReadJwtToken(token);
+        var expirationTime = jwtToken.ValidTo;
+
+        return new DateTimeOffset(expirationTime, TimeSpan.Zero);
+    }
+
+    /// <summary>
     /// Gets the key for storing revoked tokens in the cache based on the current date.
     /// </summary>
     /// <returns>The key for storing revoked tokens in the cache.</returns>
