@@ -10,11 +10,12 @@
         /// <summary>
         /// Generates a new JWT token for the given user ID and expiration time using the provided secret.
         /// </summary>
-        /// <param name="id">The ID of the user for which the token will be generated.</param>
+        /// <param name="userId">The ID of the user for which the token will be generated.</param>
+        /// <param name="userName">The userName of the user for which the token will be generated.</param>
         /// <param name="expiresInMinutes">The number of minutes after which the token will expire.</param>
         /// <param name="secret">The secret key used to sign the token.</param>
         /// <returns>A new JWT token.</returns>
-        string GenerateToken(string id, int expiresInMinutes, string secret);
+        string GenerateToken(string userId, string userName, int expiresInMinutes, string secret);
 
         /// <summary>
         /// Verifies the signature of the provided JWT token using the provided secret and returns a ClaimsPrincipal

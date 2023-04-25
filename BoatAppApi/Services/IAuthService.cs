@@ -7,7 +7,7 @@
     {
         Task<BoatApiUser?> AuthenticateAsync(string username, string password);
 
-        string GenerateJwtToken(string username);
+        string GenerateJwtToken(string userId, string userName);
 
         ClaimsPrincipal VerifyJwtToken(string token);
     }

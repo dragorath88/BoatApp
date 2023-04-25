@@ -1,5 +1,6 @@
 ﻿namespace BoatApi.Services
 {
+    using System;
     using System.Security.Claims;
     using BoatApi.Models;
     using BoatAppApi.Services;
@@ -32,8 +33,20 @@
         /// <param name="username">The username of the user to authenticate.</param>
         /// <param name="password">The password of the user to authenticate.</param>
         /// <returns>The authenticated user, or null if authentication fails.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="username"/> or <paramref name="password"/> is null or empty.</exception>
+        /// <exception cref="Exception">Thrown if an unexpected error occurs while authenticating the user.</exception>
         public async Task<BoatApiUser?> AuthenticateAsync(string username, string password)
         {
+            if (string.IsNullOrEmpty(username))
+            {
+                throw new ArgumentNullException(nameof(username));
+            }
+
+            if (string.IsNullOrEmpty(password))
+            {
+                throw new ArgumentNullException(nameof(password));
+            }
+
             try
             {
                 var user = await _userManager.FindByNameAsync(username);
@@ -52,27 +65,27 @@
             }
             catch (Exception ex)
             {
-                // Log the exception here
-                throw new Exception("An error occurred while authenticating the user.", ex);
+                throw new Exception($"An error occurred while authenticating the user with username '{username}'.", ex);
             }
         }
 
         /// <summary>
         /// Generates a JWT token for the specified id.
         /// </summary>
-        /// <param name="id">The id to generate a token.</param>
+        /// <param name="userId">The userId to generate a token.</param>
+        /// <param name="userName">The userName to generate a token.</param>
         /// <returns>The generated JWT token.</returns>
-        public string GenerateJwtToken(string id)
+        public string GenerateJwtToken(string userId, string userName)
         {
-            if (string.IsNullOrEmpty(id))
+            if (string.IsNullOrEmpty(userId))
             {
-                throw new ArgumentException("id cannot be null or empty.", nameof(id));
+                throw new ArgumentException("id cannot be null or empty.", nameof(userId));
             }
 
             try
             {
                 var expiresInMinutes = _configuration.GetValue<int>("Jwt:ExpiresInMinutes");
-                return _jwtService.GenerateToken(id, expiresInMinutes, _secretKey);
+                return _jwtService.GenerateToken(userId, userName, expiresInMinutes, _secretKey);
             }
             catch (Exception ex)
             {
