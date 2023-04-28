@@ -148,6 +148,13 @@ builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
 
+// Apply migrations
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<BoatApiDbContext>();
+    dbContext.Database.Migrate();
+}
+
 // Swagger middleware
 if (app.Environment.IsDevelopment())
 {
